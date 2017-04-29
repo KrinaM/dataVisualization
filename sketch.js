@@ -17,13 +17,13 @@ var detector = function(row) {
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
 */
-  this.X = map(this.longitude,-180,180,0,widthMap);
-  this.Y = map(this.lattitude,-90,90, heightCanvas,0);
+  this.X = map(this.longitude,50.6, 51.5, 0, widthMap);
+  this.Y = map(this.lattitude,2.5, 5.6, heightCanvas, 0);
 
 }
 
 function preload() {
-  table = loadTable("DataMerged.csv","csv","header");
+  table = loadTable("DataMerged_short.csv","csv","header");
   rows = table.getRows();
 }
 
