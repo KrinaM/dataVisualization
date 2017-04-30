@@ -53,12 +53,12 @@ function setup() {
     loc.push(thisDetector.X);
     loc.push(thisDetector.Y);  */
     detectorsImage.noStroke();
-    detectorsImage.fill(255,128,0,255);
+    detectorsImage.fill(0,0,0,255); // orange: 255,128,0,255)
     detectorsImage.ellipse(selecDetector.X, selecDetector.Y, 10, 10);
     detectors.push(selecDetector);
   }
   
-  translate(widthCanvas-widthTable-margin, 0)
+  translate(widthCanvas-widthTable-margin, margin)
   rect(0, 0, widthTable, heightTable)
   for (var i=1; i<34; i++ ) {
     line(i*bin, 0, i*bin, heightTable)
