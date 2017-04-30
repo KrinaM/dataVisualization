@@ -60,7 +60,10 @@ function setup() {
   for (var i=1; i<34; i++ ) {
     line(i*bin, 0, i*bin, heightTable)
   }
-  
+  for (var j=5; j<20; j++ ) {
+    text(j + ".00", -margin*.75, (j-5)*heightTable/14);
+    textSize(10);
+  }
 }
 
 function draw() {
