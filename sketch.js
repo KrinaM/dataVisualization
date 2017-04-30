@@ -1,3 +1,4 @@
+// JavaScript Document
 /* P5 Implementation of Traffic Data Visualization
 Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
@@ -6,7 +7,6 @@ var table, rows, rows2; // , minX, maxX, minY, maxY;
 var detectors = [];
 var detectorsImage;
 
-<<<<<<< HEAD
 var heightCanvas = 1200;
 var widthCanvas =  1200;
 var widthMap = widthCanvas * .5;
@@ -15,27 +15,6 @@ var heightMap = heightCanvas * .5;
 
 function preload() {
   table = loadTable("det120uniqM.csv","csv","header"); // det199uniq.csv
-=======
-var heightCanvas = 400;
-var widthCanvas =  1600;
-var widthMap = widthCanvas * .6;
-var widthBar = widthCanvas * .8;
-
-var detector = function(row) {
-  this.longitude = row.getNum("Y");
-  this.lattitude = row.getNum("X");
-/*  this.Vht = row.getNum("Vht");
-  this.It = row.getNum("It");
-  this.Bt = row.getNum("Bt");
-*/
-  this.X = map(this.longitude,50.8, 51, 0, widthMap);
-  this.Y = map(this.lattitude,4, 4.6, heightCanvas, 0);
-
-}
-
-function preload() {
-  table = loadTable("obs10det.csv","csv","header");
->>>>>>> 9de03dc16e207238da215d2737b6205c578e7ded
   rows = table.getRows();
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
   
@@ -46,15 +25,10 @@ function preload() {
 function setup() {
   createCanvas(widthCanvas, heightCanvas);
   noLoop();
-<<<<<<< HEAD
   
 //  all detectors inner ring
  for (var r = 0; r < rows.length; r++) {
  
-=======
-  detectorsImage = createGraphics(widthCanvas, heightCanvas);
-  for (var r = 0; r < rows.length; r++) {
->>>>>>> 9de03dc16e207238da215d2737b6205c578e7ded
     var thisDetector = new detector(rows[r]);
     
      /*   data.push(thisFlight.distance);  
@@ -64,7 +38,6 @@ function setup() {
  
     detectorsImage.noStroke();
     detectorsImage.fill(160,160,160,160);
-<<<<<<< HEAD
     detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 10, 10);
  
     detectors.push(thisDetector);
@@ -87,16 +60,11 @@ function setup() {
     detectors.push(selecDetector);
     }
     
-=======
-    detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 6, 6);
-    detectors.push(thisDetector);
-  }
->>>>>>> 9de03dc16e207238da215d2737b6205c578e7ded
 //  console.log(rows[1]);
 }
 
 function draw() {
-  image(detectorsImage, 0, 0);
+    image(detectorsImage, 0, 0);
 }
 
 var detector = function(row) {
