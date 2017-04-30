@@ -35,7 +35,7 @@ function setup() {
     var thisDetector = new detector(rows[r]);
     detectorsImage.noStroke();
     detectorsImage.fill(160,160,160,160);
-    detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 10, 10);
+    detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 6, 6);
     detectors.push(thisDetector);
   }
 //  console.log(rows[1]);
