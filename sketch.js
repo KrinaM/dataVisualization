@@ -20,6 +20,11 @@ var widthTable = heightCanvas * .45;
 var margin = widthCanvas * .05;
 var bin = widthTable / 34.0;
 
+var dayDet = [[]];
+var Vht = [];
+var det = [];
+
+
 function preload() {
   table = loadTable("det120uniqM.csv", "csv", "header"); // all detectors unique obs
   rows = table.getRows();
@@ -86,7 +91,20 @@ function setup() {
     allDetectors.push(allDetector);
   }
 
-  console.log(allDetectors[0])
+  // console.log(allDetectors[0])
+
+  for (var i = 0; i < 5; i++) {
+    det[i] = allDetectors.slice((i * 7920), (i + 1) * 7920);
+  }
+  //  console.log(det[0].length)
+
+  for (var i = 0; i < 44; i++) {
+    for (var j = 0; j < 5; j++) {
+      dayDet[j] = det[j].slice(i * 180, (i + 1) * 180);
+    }
+  }
+    console.log(dayDet[0].length);
+
 
   // Table for 6 selected locations
   translate(widthCanvas - widthTable - margin, margin)
@@ -130,7 +148,14 @@ var detector = function(row) {
   //  this.vht = function()
 };
 
-
+/*
+function getValues(data) {
+  var j=0;
+  for (var i=0; i<data.length; i+=180) {
+    Vht[j] = 
+  }
+}
+*/
 
 
 /*
