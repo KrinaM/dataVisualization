@@ -24,13 +24,14 @@ var dayDet = [
   [],
   [],
   [],
-  []
+  [],
+  [],
 ];
 
 var Vht = [];
 var det = [];
 
-var numDet = 5; // number of selected detectors
+var numDet = 6; // number of selected detectors
 var numBar = numDet * 5 + numDet - 1; // number of vertical bars
 var bin = widthTable / numBar;
 var heightHour = heightTable / 15;
