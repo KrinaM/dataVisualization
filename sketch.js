@@ -18,35 +18,60 @@ var heightMap = heightCanvas * .45;
 var heightTable = widthCanvas * .8;
 var widthTable = heightCanvas * .45;
 var margin = widthCanvas * .05;
-var bin = widthTable / 34.0;
 
-var dayDet = [[],[],[],[],[]];
+var dayDet = [
+  [],
+  [],
+  [],
+  [],
+  []
+];
+
 var Vht = [];
 var det = [];
 
+var numDet = 5; // number of selected detectors
+var numBar = numDet * 5 + numDet - 1; // number of vertical bars
+var bin = widthTable / numBar;
+var heightHour = heightTable / 15;
+
+
+//var col = new Array(new Array(new Array()));
+var col = new Array(numDet); // SOS 3145 exei 1843
+for (var i = 0; i < numDet; i++) {
+  col[i] = new Array(44); // march has 22, october has 22 days
+  for (var j = 0; j < 44; j++) {
+    col[i][j] = new Array(180);
+  };
+};
+
+
+
+
+
+// console.log(numBar)
 
 function preload() {
   table = loadTable("det120uniqM.csv", "csv", "header"); // all detectors unique obs
   rows = table.getRows();
-  console.log(rows);
+
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
   table2 = loadTable("det6uniq.csv", "csv", "header") // selected detectors unique obs
   rows2 = table2.getRows();
   table3 = loadTable("BRUdataSEL.csv", "csv", "header") // selected detectors all data
   rows3 = table3.getRows()
 
-
-  var data = new Array(6); // SOS 3145 exei 1843
-  for (var i = 0; i < 6; i++) {
-    data[i] = new Array(5); // march has 22, october has 22 days
-    for (var j = 0; j < 5; j++) {
-      data[i][j] = new Array(10);
-      for (var k = 0; k < 10; k++) {
-        data[i][j][k] = new Array(180);
+  /*var data = new Array(6); // SOS 3145 exei 1843
+    for (var i = 0; i < 6; i++) {
+      data[i] = new Array(5); // march has 22, october has 22 days
+      for (var j = 0; j < 5; j++) {
+        data[i][j] = new Array(10);
+        for (var k = 0; k < 10; k++) {
+          data[i][j][k] = new Array(180);
+        };
       };
     };
-  };
-
+  */
   /*for (var i = 0; i<6; i++){
       for (var j = 0; j<5; j++){
           for (var k = 0; k <180){
@@ -63,23 +88,15 @@ function setup() {
   //  all detectors inner ring
   for (var r = 0; r < rows.length; r++) {
     var thisDetector = new detector(rows[r]);
-    /*   data.push(thisFlight.distance);  
-    loc.push(0);
-    loc.push(thisDetector.X);
-    loc.push(thisDetector.Y);  */
     detectorsImage.noStroke();
     detectorsImage.fill(160, 160, 160, 160);
     detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 10, 10);
     detectors.push(thisDetector);
   }
-  //  console.log(detectors);
+
   // selected detectors
   for (var r = 0; r < rows2.length; r++) {
     var selecDetector = new detector(rows2[r]);
-    /*   data.push(thisFlight.distance);  
-    loc.push(0);
-    loc.push(thisDetector.X);
-    loc.push(thisDetector.Y);  */
     detectorsImage.noStroke();
     detectorsImage.fill(0, 0, 0, 255); // orange: 255,128,0,255)
     detectorsImage.ellipse(selecDetector.X, selecDetector.Y, 10, 10);
@@ -93,23 +110,28 @@ function setup() {
 
   // console.log(allDetectors[0])
 
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < numDet; i++) {
     det[i] = allDetectors.slice((i * 7920), (i + 1) * 7920);
   }
   //  console.log(det[0].length)
 
   for (var i = 0; i < 44; i++) {
-    for (var j = 0; j < 5; j++) {
+    for (var j = 0; j < numDet; j++) {
       dayDet[j][i] = det[j].slice(i * 180, (i + 1) * 180);
+      for (var k = 0; k < 180; k++) {
+        col[j][i][k] = map(dayDet[j][i][k].Vht, 0, 167, 255, 100)
+      }
     }
   }
-    console.log(dayDet[1][43].length);
-
-
+  console.log(col[0][0][0]);
+  //  console.log(dayDet[1][43].length);
+  // console.log(min(allDetectors.Vht));
+  //  console.log(dayDet[0][0][0].Vht);
   // Table for 6 selected locations
   translate(widthCanvas - widthTable - margin, margin)
+  noStroke()
   rect(0, 0, widthTable, heightTable)
-  for (var i = 1; i < 34; i++) {
+  for (var i = 1; i < numBar; i++) {
     line(i * bin, 0, i * bin, heightTable)
   }
   for (var j = 5; j < 20; j++) {
@@ -117,7 +139,12 @@ function setup() {
     textSize(10);
   }
 
-  // 
+  // sienna	#A0522D	(160,82,45,int)
+  // dark orange	#FF8C00	(255,140,0) 
+  // sea green	#2E8B57	(46,139,87)
+  // 	dark violet	#9400D3	(148,0,211)
+  // crimson	#DC143C	(220,20,60)
+  //gold	#FFD700	(255,215,0)
 
 
 }
@@ -134,7 +161,29 @@ function draw() {
   text("4", 232, 355);
   text("5", 288, 442);
   text("6", 298, 500);
+
+  translate(widthCanvas - widthTable - margin, margin)
+  for (var j = 0; j < numBar; j++) {
+    for (var i = 0; i < 180; i++) {
+      if (j==0 || j==6 || j==12 || j==18 || j==24) {
+        fill(160, 82, 45, col[0][j][i])
+      } else if (j==1 || j==7 || j==13 || j==19 || j==25) {
+        fill(255, 140, 0, col[1][j][i])
+      } else if (j==2 || j==8 || j==14 || j==20 || j==26) {
+        fill(46, 139, 87, col[2][j][i])
+      } else if (j==3 || j==9 || j==15 || j==21 || j==27) {
+        fill(148, 0, 211, col[3][j][i])
+      } else if (j==4 || j==10 || j==16 || j==22 || j==28) {
+        fill(65, 105, 225, col[4][j][i]) 
+      }  else {
+        fill(255,255,255)
+      }
+      noStroke()
+      rect(j * bin, i * heightHour / 12, bin, heightHour / 12);
+    }
+  }
 }
+console.log(numBar)
 
 var detector = function(row) {
   this.longitude = row.getNum("Y");
