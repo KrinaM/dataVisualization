@@ -20,7 +20,7 @@ var widthTable = heightCanvas * .45;
 var margin = widthCanvas * .05;
 var bin = widthTable / 34.0;
 
-var dayDet = [[]];
+var dayDet = [[],[],[],[],[]];
 var Vht = [];
 var det = [];
 
@@ -100,10 +100,10 @@ function setup() {
 
   for (var i = 0; i < 44; i++) {
     for (var j = 0; j < 5; j++) {
-      dayDet[j] = det[j].slice(i * 180, (i + 1) * 180);
+      dayDet[j][i] = det[j].slice(i * 180, (i + 1) * 180);
     }
   }
-    console.log(dayDet[0].length);
+    console.log(dayDet[1][43].length);
 
 
   // Table for 6 selected locations
