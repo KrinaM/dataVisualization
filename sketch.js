@@ -97,6 +97,17 @@ function setup() {
 function draw() {
     image(detectorsImage, 0, 200);
 //    image(tableImage, 0, 0);
+
+textSize(20);
+fill(0, 102, 153);
+text("1", 144, 746);
+text("2", 149, 536);
+text("3", 156, 425);
+text("4", 232, 355);
+text("5", 288, 442);
+text("6", 298, 500);
+
+
 }
 
 var detector = function(row) {
