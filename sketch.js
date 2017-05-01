@@ -43,8 +43,8 @@ for (var i = 0; i < numDet; i++) {
   col[i] = new Array(44); // march has 22, october has 22 days
   for (var j = 0; j < 44; j++) {
     col[i][j] = new Array(180);
-  };
-};
+  }
+}
 
 
 
@@ -57,10 +57,10 @@ function preload() {
   rows = table.getRows();
 
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
-  table2 = loadTable("det6uniq.csv", "csv", "header") // selected detectors unique obs
+  table2 = loadTable("det6uniq.csv", "csv", "header"); // selected detectors unique obs
   rows2 = table2.getRows();
-  table3 = loadTable("BRUdataSEL.csv", "csv", "header") // selected detectors all data
-  rows3 = table3.getRows()
+  table3 = loadTable("BRUdataSEL.csv", "csv", "header"); // selected detectors all data
+  rows3 = table3.getRows();
 
   /*var data = new Array(6); // SOS 3145 exei 1843
     for (var i = 0; i < 6; i++) {
@@ -120,7 +120,7 @@ function setup() {
     for (var j = 0; j < numDet; j++) {
       dayDet[j][i] = det[j].slice(i * 180, (i + 1) * 180);
       for (var k = 0; k < 180; k++) {
-        col[j][i][k] = map(dayDet[j][i][k].Vht, 0, 167, 255, 100)
+        col[j][i][k] = map(dayDet[j][i][k].Vht, 0, 167, 255, 100);
       }
     }
   }
@@ -129,11 +129,11 @@ function setup() {
   // console.log(min(allDetectors.Vht));
   //  console.log(dayDet[0][0][0].Vht);
   // Table for 6 selected locations
-  translate(widthCanvas - widthTable - margin, margin)
-  noStroke()
-  rect(0, 0, widthTable, heightTable)
+  translate(widthCanvas - widthTable - margin, margin);
+  noStroke();
+  rect(0, 0, widthTable, heightTable);
   for (var i = 1; i < numBar; i++) {
-    line(i * bin, 0, i * bin, heightTable)
+    line(i * bin, 0, i * bin, heightTable);
   }
   for (var j = 5; j < 20; j++) {
     text(j + ":00", -margin * .5, (j - 5) * heightTable / 14);
@@ -163,30 +163,30 @@ function draw() {
   text("5", 288, 442);
   text("6", 298, 500);
 
-  translate(widthCanvas - widthTable - margin, margin)
+  translate(widthCanvas - widthTable - margin, margin);
   for (var j = 0; j < numBar; j++) {
     for (var i = 0; i < 180; i++) {
       if (j==0 || j==7 || j==14 || j==21 || j==28) {
-        fill(160, 82, 45, col[0][j][i])
+        fill(160, 82, 45, col[0][j][i]);
       } else if (j==1 || j==8 || j==15 || j==22 || j==29) {
-        fill(255, 140, 0, col[1][j][i])
+        fill(255, 140, 0, col[1][j][i]);
       } else if (j==2 || j==9 || j==16 || j==23 || j==30) {
-        fill(46, 139, 87, col[2][j][i])
+        fill(46, 139, 87, col[2][j][i]);
       } else if (j==3 || j==10 || j==17 || j==24 || j==31) {
-        fill(148, 0, 211, col[3][j][i])
+        fill(148, 0, 211, col[3][j][i]);
       } else if (j==4 || j==11 || j==18 || j==25 || j==32) {
-        fill(65, 105, 225, col[4][j][i]) 
+        fill(65, 105, 225, col[4][j][i]); 
       } else if (j==5 || j==12 || j==19 || j==26 || j==33) {
-        fill(220, 20, 60, col[5][j][i]) 
+        fill(220, 20, 60, col[5][j][i]); 
       } else {
-        fill(255,255,255)
+        fill(255,255,255);
       }
-      noStroke()
+      noStroke();
       rect(j * bin, i * heightHour / 12, bin, heightHour / 12);
     }
   }
 }
-console.log(numBar)
+//console.log(numBar)
 
 var detector = function(row) {
   this.longitude = row.getNum("Y");
