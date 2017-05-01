@@ -5,6 +5,7 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 
 var table, rows, rows2; // , minX, maxX, minY, maxY;
 var detectors = [];
+var selecDetectors = [];
 var detectorsImage;
 var tableImage;
 
@@ -38,11 +39,11 @@ for (var i = 0; i <6; i++){
     };
 };
 
-for (var i = 0; i<6; i++){
+/*for (var i = 0; i<6; i++){
     for (var j = 0; j<5; j++){
         for (var k = 0; k <180){
             data[i][j][k] = table3.rows3.getNum("Vt")
-}}}
+}}} */
 console.log(data);
 
 }
@@ -63,7 +64,7 @@ function setup() {
     detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 10, 10);
     detectors.push(thisDetector);
   }
-    console.log(detectors);
+  //  console.log(detectors);
 // selected detectors
  for (var r = 0; r < rows2.length; r++) {
     var selecDetector = new detector(rows2[r]);
@@ -74,7 +75,7 @@ function setup() {
     detectorsImage.noStroke();
     detectorsImage.fill(0,0,0,255); // orange: 255,128,0,255)
     detectorsImage.ellipse(selecDetector.X, selecDetector.Y, 10, 10);
-    detectors.push(selecDetector);
+    selecDetectors.push(selecDetector);
   }
 
 // Table for 6 selected locations
@@ -108,7 +109,16 @@ var detector = function(row) {
 */
   this.Y = map(this.longitude, 50.72422, 51, widthMap, 0); // 50.86, 51
   this.X = map(this.lattitude, 3.98, 4.9237, 0, heightMap); // 4, 4.6 4.013617, 4.923672
+  this.vht = function()
 };
+
+var variable = function(row) {
+  this.Vht = row.getNum("Vht");
+  this.It = row.getNum("It");
+  this.Bt = row.getNum("Bt");
+  
+  
+}
 
 /*
 var detectorTable = function(array) {
