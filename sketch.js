@@ -166,17 +166,19 @@ function draw() {
   translate(widthCanvas - widthTable - margin, margin)
   for (var j = 0; j < numBar; j++) {
     for (var i = 0; i < 180; i++) {
-      if (j==0 || j==6 || j==12 || j==18 || j==24) {
+      if (j==0 || j==7 || j==14 || j==21 || j==28) {
         fill(160, 82, 45, col[0][j][i])
-      } else if (j==1 || j==7 || j==13 || j==19 || j==25) {
+      } else if (j==1 || j==8 || j==15 || j==22 || j==29) {
         fill(255, 140, 0, col[1][j][i])
-      } else if (j==2 || j==8 || j==14 || j==20 || j==26) {
+      } else if (j==2 || j==9 || j==16 || j==23 || j==30) {
         fill(46, 139, 87, col[2][j][i])
-      } else if (j==3 || j==9 || j==15 || j==21 || j==27) {
+      } else if (j==3 || j==10 || j==17 || j==24 || j==31) {
         fill(148, 0, 211, col[3][j][i])
-      } else if (j==4 || j==10 || j==16 || j==22 || j==28) {
+      } else if (j==4 || j==11 || j==18 || j==25 || j==32) {
         fill(65, 105, 225, col[4][j][i]) 
-      }  else {
+      } else if (j==5 || j==12 || j==19 || j==26 || j==33) {
+        fill(220, 20, 60, col[5][j][i]) 
+      } else {
         fill(255,255,255)
       }
       noStroke()
