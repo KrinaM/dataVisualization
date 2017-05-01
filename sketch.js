@@ -24,14 +24,33 @@ function preload() {
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
   table2 = loadTable("det6uniq.csv","csv","header") // selected detectors unique obs
   rows2 = table2.getRows();
-  table3 = LoadTable("BRUdataSEL.csv","csv","header") // selected detectors all data
+  table3 = loadTable("BRUdataSEL.csv","csv","header") // selected detectors all data
   rows3 = table3.getRows();
+
+var data = new Array(6); // SOS 3145 exei 1843
+for (var i = 0; i <6; i++){
+    data[i] = new Array(5); // march has 22, october has 22 days
+    for (var j = 0; j< 5; j++) {
+        data[i][j] = new Array(10);
+        for (var k = 0; k<10 ; k++) {
+            data[i][j][k] = new Array(180);
+        };
+    };
+};
+
+for (var i = 0; i<6; i++){
+    for (var j = 0; j<5; j++){
+        for (var k = 0; k <180){
+            data[i][j][k] = table3.rows3.getNum("Vt")
+}}}
+console.log(data);
+
 }
 
 function setup() {
   createCanvas(widthCanvas, heightCanvas);
   noLoop();
-  
+    
 //  all detectors inner ring
  for (var r = 0; r < rows.length; r++) {
     var thisDetector = new detector(rows[r]);
@@ -44,7 +63,7 @@ function setup() {
     detectorsImage.ellipse(thisDetector.X, thisDetector.Y, 10, 10);
     detectors.push(thisDetector);
   }
-    
+    console.log(detectors);
 // selected detectors
  for (var r = 0; r < rows2.length; r++) {
     var selecDetector = new detector(rows2[r]);
@@ -57,7 +76,8 @@ function setup() {
     detectorsImage.ellipse(selecDetector.X, selecDetector.Y, 10, 10);
     detectors.push(selecDetector);
   }
-  
+
+// Table for 6 selected locations
   translate(widthCanvas-widthTable-margin, margin)
   rect(0, 0, widthTable, heightTable)
   for (var i=1; i<34; i++ ) {
@@ -67,6 +87,10 @@ function setup() {
     text(j + ":00", -margin*.5, (j-5)*heightTable/14);
     textSize(10);
   }
+  
+// 
+  
+  
 }
 
 function draw() {
@@ -96,6 +120,25 @@ var detector = function(row) {
   this.Y = map(this.longitude, 50.72422, 51, widthMap, 0); // 50.86, 51
   this.X = map(this.lattitude, 3.98, 4.9237, 0, heightMap); // 4, 4.6 4.013617, 4.923672
 };
+
+/*
+var detectorTable = function(array) {
+//  this.longitude = row.getNum("Y");
+//  this.lattitude = row.getNum("X");
+//  this.ID = row.getString("UNIEKEID");
+
+for (var LOC = 1; LOC < 6; LOC++) {  
+    for (var DAY = 1; DAY < 31; DAY++) {  
+        this.Vht = array.getNum("Vht");
+        this.It = row.getNum("It");
+        this.Bt = row.getNum("Bt");
+    }
+}
+
+  this.Y = map(this.longitude, 50.72422, 51, widthMap, 0); // 50.86, 51
+  this.X = map(this.lattitude, 3.98, 4.9237, 0, heightMap); // 4, 4.6 4.013617, 4.923672
+};
+*/
 
 /*var tableImage = function(row3) {
     this.Vt = row.getNum("Vt");
