@@ -7,7 +7,7 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 // include all !! detectors kai px mporoume na to xorisoume se N,S,E,W.
 // na sinexisoume kai na simperilavoume kai ton kiklo
 
-var table, rows, rows2; // , minX, maxX, minY, maxY;
+var table, rows, rows2, rows3; // , minX, maxX, minY, maxY;
 var detectors = [];
 var selecDetectors = [];
 var allDetectors = [];
@@ -49,10 +49,6 @@ for (var i = 0; i < numDet; i++) {
     col[i][j] = new Array(180);
   }
 }
-
-
-
-
 
 // console.log(numBar)
 
