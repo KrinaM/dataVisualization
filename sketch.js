@@ -1,4 +1,3 @@
-// JavaScript Document
 /* P5 Implementation of Traffic Data Visualization
 Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
@@ -99,7 +98,21 @@ function setup() {
   for (var r = 0; r < rows2.length; r++) {
     var selecDetector = new detector(rows2[r]);
     detectorsImage.noStroke();
-    detectorsImage.fill(0, 0, 0, 255); // orange: 255,128,0,255)
+    if (r == 0) {
+      detectorsImage.fill(160, 82, 45, 255);
+    } else if (r == 1) {
+      detectorsImage.fill(255, 140, 0, 255);
+    } else if (r == 2) {
+      detectorsImage.fill(46, 139, 87, 255);
+    } else if (r == 3) {
+      detectorsImage.fill(148, 0, 211, 255);
+    } else if (r == 4) {
+      detectorsImage.fill(65, 105, 225, 255);
+    } else if (r == 5) {
+      detectorsImage.fill(220, 20, 60, 255);
+    } else {
+      detectorsImage.fill(160, 160, 160, 160);
+    }
     detectorsImage.ellipse(selecDetector.X, selecDetector.Y, 10, 10);
     selecDetectors.push(selecDetector);
   }
@@ -120,7 +133,7 @@ function setup() {
     for (var j = 0; j < numDet; j++) {
       dayDet[j][i] = det[j].slice(i * 180, (i + 1) * 180);
       for (var k = 0; k < 180; k++) {
-        col[j][i][k] = map(dayDet[j][i][k].Vht, 0, 167, 255, 100);
+        col[j][i][k] = map(dayDet[j][i][k].Vht, 0, 167, 255, 50);
       }
     }
   }
@@ -133,8 +146,15 @@ function setup() {
   noStroke();
   rect(0, 0, widthTable, heightTable);
   for (var i = 1; i < numBar; i++) {
-    line(i * bin, 0, i * bin, heightTable);
+    line(i, 0, i * bin, heightTable);
   }
+  text("Monday", 25, -5);
+  text("Tuesday",130, -5);
+  text("Wednesday",119.5+110, -5 );
+  text("Thursday",119.5+110+110+5, -5 );
+  text("Friday",119.5+110*3+10, -5 );
+
+//console.log(130-widthTable/numBar+5)
   for (var j = 5; j < 20; j++) {
     text(j + ":00", -margin * .5, (j - 5) * heightTable / 14);
     textSize(10);
@@ -156,30 +176,30 @@ function draw() {
 
   textSize(20);
   fill(0, 102, 153);
-  text("1", 144, 746);
-  text("2", 149, 536);
-  text("3", 156, 425);
+  text("2", 144, 746);
+  text("3", 149, 536);
+  text("5", 156, 425);
   text("4", 232, 355);
-  text("5", 288, 442);
+  text("1", 288, 442);
   text("6", 298, 500);
 
   translate(widthCanvas - widthTable - margin, margin);
   for (var j = 0; j < numBar; j++) {
     for (var i = 0; i < 180; i++) {
-      if (j==0 || j==7 || j==14 || j==21 || j==28) {
+      if (j == 0 || j == 7 || j == 14 || j == 21 || j == 28) {
         fill(160, 82, 45, col[0][j][i]);
-      } else if (j==1 || j==8 || j==15 || j==22 || j==29) {
+      } else if (j == 1 || j == 8 || j == 15 || j == 22 || j == 29) {
         fill(255, 140, 0, col[1][j][i]);
-      } else if (j==2 || j==9 || j==16 || j==23 || j==30) {
+      } else if (j == 2 || j == 9 || j == 16 || j == 23 || j == 30) {
         fill(46, 139, 87, col[2][j][i]);
-      } else if (j==3 || j==10 || j==17 || j==24 || j==31) {
+      } else if (j == 3 || j == 10 || j == 17 || j == 24 || j == 31) {
         fill(148, 0, 211, col[3][j][i]);
-      } else if (j==4 || j==11 || j==18 || j==25 || j==32) {
-        fill(65, 105, 225, col[4][j][i]); 
-      } else if (j==5 || j==12 || j==19 || j==26 || j==33) {
-        fill(220, 20, 60, col[5][j][i]); 
+      } else if (j == 4 || j == 11 || j == 18 || j == 25 || j == 32) {
+        fill(65, 105, 225, col[4][j][i]);
+      } else if (j == 5 || j == 12 || j == 19 || j == 26 || j == 33) {
+        fill(220, 20, 60, col[5][j][i]);
       } else {
-        fill(255,255,255);
+        fill(255, 255, 255);
       }
       noStroke();
       rect(j * bin, i * heightHour / 12, bin, heightHour / 12);
