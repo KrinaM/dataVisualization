@@ -86,7 +86,7 @@ function setup() {
   createCanvas(widthCanvas, heightCanvas);
   noLoop();
 
-  //  all detectors inner ring
+  //  all detectors inner ring (clockwise)
   for (var r = 0; r < rows.length; r++) {
     var thisDetector = new detector(rows[r]);
     detectorsImage.noStroke();
@@ -100,17 +100,17 @@ function setup() {
     var selecDetector = new detector(rows2[r]);
     detectorsImage.noStroke();
     if (r == 0) {
-      detectorsImage.fill(160, 82, 45, 255);
+      detectorsImage.fill(255, 140, 0, 255); // dark orange
     } else if (r == 1) {
-      detectorsImage.fill(255, 140, 0, 255);
+      detectorsImage.fill(46, 139, 87, 255); // sea green
     } else if (r == 2) {
-      detectorsImage.fill(46, 139, 87, 255);
+      detectorsImage.fill(220, 20, 60, 255); // crimson (dark pink)
     } else if (r == 3) {
-      detectorsImage.fill(148, 0, 211, 255);
+      detectorsImage.fill(160, 82, 45, 255); // sienna (brown)
     } else if (r == 4) {
-      detectorsImage.fill(65, 105, 225, 255);
+      detectorsImage.fill(65, 105, 225, 255); // royal blue
     } else if (r == 5) {
-      detectorsImage.fill(220, 20, 60, 255);
+      detectorsImage.fill(148, 0, 211, 255); // dark violet
     } else {
       detectorsImage.fill(160, 160, 160, 160);
     }
@@ -128,9 +128,9 @@ function setup() {
   for (var i = 0; i < numDet; i++) {
     det[i] = allDetectors.slice((i * 7920), (i + 1) * 7920);
   }
-  //  console.log(det[0].length)
+console.log(det[1])
 
-  for (var i = 0; i < 44; i++) {
+  for (var i = 0; i < 44; i++) { // (j = number of detectors, i = number of days, k = hour)
     for (var j = 0; j < numDet; j++) {
       dayDet[j][i] = det[j].slice(i * 180, (i + 1) * 180);
       for (var k = 0; k < 180; k++) {
@@ -177,28 +177,28 @@ function draw() {
 
   textSize(20);
   fill(0, 102, 153);
-  text("2", 144, 746);
-  text("3", 149, 536);
-  text("5", 156, 425);
+  text("1", 144, 746);
+  text("2", 149, 536);
+  text("3", 156, 425);
   text("4", 232, 355);
-  text("1", 288, 442);
+  text("5", 288, 442);
   text("6", 298, 500);
 
   translate(widthCanvas - widthTable - margin, margin);
   for (var j = 0; j < numBar; j++) {
     for (var i = 0; i < 180; i++) {
       if (j == 0 || j == 7 || j == 14 || j == 21 || j == 28) {
-        fill(160, 82, 45, col[0][j][i]);
+        fill(46, 139, 87, col[0][j][i]);
       } else if (j == 1 || j == 8 || j == 15 || j == 22 || j == 29) {
-        fill(255, 140, 0, col[1][j][i]);
+        fill(220, 20, 60, col[1][j][i]);
       } else if (j == 2 || j == 9 || j == 16 || j == 23 || j == 30) {
-        fill(46, 139, 87, col[2][j][i]);
+        fill(65, 105, 225, col[2][j][i]);
       } else if (j == 3 || j == 10 || j == 17 || j == 24 || j == 31) {
-        fill(148, 0, 211, col[3][j][i]);
+        fill(160, 82, 45, col[3][j][i]);
       } else if (j == 4 || j == 11 || j == 18 || j == 25 || j == 32) {
-        fill(65, 105, 225, col[4][j][i]);
+        fill(255, 140, 0, col[4][j][i]);
       } else if (j == 5 || j == 12 || j == 19 || j == 26 || j == 33) {
-        fill(220, 20, 60, col[5][j][i]);
+        fill(148, 0, 211, col[5][j][i]);
       } else {
         fill(255, 255, 255);
       }
@@ -265,3 +265,17 @@ function mouseMoved() {
 }
 
 */
+
+
+
+// Day Averages for Vht over the 2 months
+for (var j=1; i<numDet; i++){
+for (var i=1; i<7920; i+=180){
+    det[j].Vht
+} 
+
+
+
+
+
+
