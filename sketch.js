@@ -267,13 +267,13 @@ function mouseMoved() {
 */
 
 
-
+/*
 // Day Averages for Vht over the 2 months
 for (var j=1; i<numDet; i++){
 for (var i=1; i<7920; i+=180){
     det[j].Vht
 } 
-
+*/
 
 
 
