@@ -22,10 +22,13 @@ var detectorsImage;
 var detectors = [];
 var heightCanvas = 1200;
 var widthCanvas = 1200;
-var widthMap = widthCanvas * .55;
-var heightMap = heightCanvas * .55;
+var widthMap = widthCanvas * .35;
+var heightMap = heightCanvas * .35;
 var heightTable = widthCanvas * .8;
 var widthTable = heightCanvas * .45;
+var widthRing = widthCanvas * .7;
+var heightRing = heightCanvas * .7;
+
 var margin = widthCanvas * .05;
 var numBar = 28;
 var heightHour = heightTable / 15;
@@ -76,11 +79,11 @@ function setup() {
     detectorsImage.noStroke();
     detectorsImage.fill(160, 160, 160, 160);
     detectorsImage.ellipse(thisDetectorIN.X, thisDetectorIN.Y, 10, 10);
-//  detectorsImage.fill(0).strokeWeight(0).textSize(14);
-//    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
+    //  detectorsImage.fill(0).strokeWeight(0).textSize(14);
+    //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
-  image(detectorsImage, 0, 200);
+  image(detectorsImage, 0, 0);
 }
 
 function draw() {
@@ -88,13 +91,12 @@ function draw() {
   // noStroke();
   rect(0, 0, widthTable, heightTable);
 
-
   //  for (var j=0; j<numBar; j++) {
   //    count = 0;
-        
+
   j = 0;
   for (var i = 1; i < detectors.length; i++) {
-  
+
     if (detectors[i].Day == 1 && detectors[i].Month == 3) {
       if (detectors[i].ID == detectors[i - 1].ID) {
         noStroke();
@@ -112,7 +114,37 @@ function draw() {
     strokeWeight(4);
     line(i * widthBar, 0, i * widthBar, heightTable);
   }
+
+  translate(-widthMap + widthTable*0.5, heightMap*1.2);
+ 
+  
+  var R1 = 250; // Radius of big Ring   
+  var R2 = 25; // Radius of small Ring
+  var startBarMargin = 2*PI*R2/44; // starting points of rays in the small ring
+  var endBarMargin = 2*PI*R1/44; // starting points of rays in the large ring
+  var heightRay = R1-R2; // long side of rectangle
+  var widthRay = endBarMargin * 0.7 // short side of rectangle 
+  /*
+   // ellipseMode(RADIUS); 
+  stroke(255,0,0);
+  fill(255);
+  ellipse(25, 25, R1*2, R1*2);
+  
+// ellipseMode(CENTER);
+  stroke(0,0,255);
+  fill(255);
+  ellipse(25, 25, R2*2, R2*2);
+  
+  for (var i = 0; i < 44; i++) {
+    rect(i*startBarMargin, 
+    )  
+    
+  }
+*/
+   
 }
+
+
 
 
 // sienna	#A0522D	(160,82,45,int)
