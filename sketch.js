@@ -22,10 +22,10 @@ var detectorsImage;
 var detectors = [];
 var heightCanvas = 1200;
 var widthCanvas = 1200;
-var widthMap = widthCanvas * .25;
-var heightMap = heightCanvas * .25;
+var widthMap = widthCanvas * .55;
+var heightMap = heightCanvas * .55;
 var heightTable = widthCanvas * .8;
-var widthTable = heightCanvas * .65;
+var widthTable = heightCanvas * .45;
 var margin = widthCanvas * .05;
 var numBar = 28;
 var heightHour = heightTable / 15;
@@ -46,6 +46,7 @@ var obs = function(row) {
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
   this.Color = map(this.Vht, 0, 167, 255, 50);
+  this.Order = row.getNum("ORDER");
 }
 
 function preload() {
@@ -75,6 +76,8 @@ function setup() {
     detectorsImage.noStroke();
     detectorsImage.fill(160, 160, 160, 160);
     detectorsImage.ellipse(thisDetectorIN.X, thisDetectorIN.Y, 10, 10);
+//  detectorsImage.fill(0).strokeWeight(0).textSize(14);
+//    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
   image(detectorsImage, 0, 200);
@@ -88,8 +91,10 @@ function draw() {
 
   //  for (var j=0; j<numBar; j++) {
   //    count = 0;
+        
   j = 0;
   for (var i = 1; i < detectors.length; i++) {
+  
     if (detectors[i].Day == 1 && detectors[i].Month == 3) {
       if (detectors[i].ID == detectors[i - 1].ID) {
         noStroke();
