@@ -21,15 +21,15 @@ var rowsTest, tableTest;
 var detectorsImage;
 var detectors = [];
 var heightCanvas = 1200;
-var widthCanvas = 1200;
-var widthMap = widthCanvas * .35;
-var heightMap = heightCanvas * .35;
+var widthCanvas = 1400;
+var widthMap = widthCanvas * .25;
+var heightMap = heightCanvas * .25;
 var heightTable = widthCanvas * .8;
 var widthTable = heightCanvas * .45;
-var widthRing = widthCanvas * .7;
-var heightRing = heightCanvas * .7;
+var widthRing = widthCanvas * .5;
+var heightRing = heightCanvas * .5;
 
-var margin = widthCanvas * .05;
+var margin = widthCanvas * .02;
 var numBar = 28;
 var heightHour = heightTable / 15;
 var widthBar = widthTable / numBar;
@@ -44,8 +44,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72422, 51, widthMap, 0); // 50.86, 51
-  this.X = map(this.lattitude, 3.98, 4.9237, 0, heightMap); // 4, 4.6 4.013617, 4.923672
+  this.Y = map(this.longitude, 50.72422, 50.92, widthMap, 0); // 50.86, 51 --- 
+  this.X = map(this.lattitude, 4.2, 4.48, 0,  heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -66,8 +66,7 @@ function preload() {
   //  rowsOUT = tableOUT.getRows();
   //  rowsBRU = tableBRU.getRows();
   //  rowsALL = tableALLuniq.getRows();
-
-
+  
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
 
 }
@@ -84,12 +83,12 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
-  image(detectorsImage, 0, 0);
+  image(detectorsImage, 270, margin);
 }
 
 function draw() {
-  translate(widthCanvas - widthTable - margin, margin);
-  // noStroke();
+  translate(widthCanvas - widthTable, margin);
+  noStroke();
   rect(0, 0, widthTable, heightTable);
 
   //  for (var j=0; j<numBar; j++) {
@@ -115,8 +114,13 @@ function draw() {
     strokeWeight(4);
     line(i * widthBar, 0, i * widthBar, heightTable);
   }
+    for (var j = 5; j < 20; j++) {
+    textSize(10);
+    fill(0);
+    text(j + ":00", -margin, (j - 5) * heightTable / 14); 
+  }
 
-  translate(-widthMap + widthTable * 0.5, heightMap * 1.2);
+  translate(-widthTable*0.9 - margin, heightMap * 2.3); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
   /* Ring visual variables */
   var R1 = 350; // Radius of big Ring   
