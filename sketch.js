@@ -45,7 +45,7 @@ var obs = function(row) {
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
   this.Y = map(this.longitude, 50.72422, 50.92, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude, 4.2, 4.48, 0,  heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.X = map(this.lattitude, 4.2, 4.48, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -67,9 +67,8 @@ function preload() {
   //  rowsOUT = tableOUT.getRows();
   //  rowsBRU = tableBRU.getRows();
   //  rowsALL = tableALLuniq.getRows();
-  
-  detectorsImage = createGraphics(widthCanvas, heightCanvas);
 
+  detectorsImage = createGraphics(widthCanvas, heightCanvas);
 }
 
 function setup() {
@@ -84,44 +83,73 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
+  console.log(detectors[0].Note)
+  var detByMonth = detectors.sort(function(a, b) {
+    return a.Month > b.Month;
+});
+  //console.log(detByMonth[0])
+  //console.log(detByMonth[1])
   image(detectorsImage, 270, margin);
 }
 
 function draw() {
+
+  // Draw Table
   translate(widthCanvas - widthTable, margin);
-  noStroke();
+  // noStroke();
+  stroke(10)
   rect(0, 0, widthTable, heightTable);
 
   //  for (var j=0; j<numBar; j++) {
   //    count = 0;
 
-  j = 0;
-  for (var i = 1; i < detectors.length; i++) {
+  var selDay = detectors.filter(function(obj) {
+    return (obj.Day == 1 && obj.Month == 3);
+  });
+ // console.log(selDay.length)
+/*
+  for (var i=0; i<28; i++) {
+      for (var k = 0; k < 180; k++) {
+          fill(46, 139, 87, selDay[count * 180 + k].Color)
+      (46, 139, 87, detectors[i].Color);
+    
+      }
+  }
 
-    if (detectors[i].Day == 1 && detectors[i].Month == 3) {
-      if (detectors[i].ID == detectors[i - 1].ID) {
-        noStroke();
-        fill(46, 139, 87, detectors[i].Color);
-        rect(j * widthBar, count * heightHour / 12, widthBar, heightHour / 12);
-        count++;
-      } else {
-        j++
-        count = 0;
+*/
+
+    
+    j = 0;
+    for (var i = 0; i < detectors.length; i++) {
+      if (detectors[i].Day == 1 && detectors[i].Month == 3) {
+        //      if (detectors[i].ID == detectors[i - 1].ID) {
+        if (count < 180) {
+          noStroke();
+          fill(46, 139, 87, detectors[i].Color);
+          rect(j * widthBar, count * heightHour / 12, widthBar, heightHour / 12);
+          count++;
+        } else {
+          j++
+          count = 0;
+        }
       }
     }
-  }
+
+
   for (var i = 1; i < numBar; i++) {
     stroke(255);
     strokeWeight(4);
     line(i * widthBar, 0, i * widthBar, heightTable);
   }
-    for (var j = 5; j < 20; j++) {
+  for (var j = 5; j < 20; j++) {
     textSize(10);
     fill(0);
-    text(j + ":00", -margin, (j - 5) * heightTable / 14); 
+    text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
 
-  translate(-widthTable*0.9 - margin, heightMap * 2.3); // -widthMap + widthTable * 0.5, heightMap * 1.2
+
+
+  translate(-widthTable * 0.9 - margin, heightMap * 2.3); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
   /* Ring visual variables */
   var R1 = 350; // Radius of big Ring   
@@ -133,15 +161,16 @@ function draw() {
   var theta = 2 * PI / 44;
   var timeRay = heightRay / 180;
   var countDay = 0;
-  
+
   // Draw small ring
- // noStroke();
+  // noStroke();
   //fill(255);
   //ellipse(25, 25, R1 * 2, R1 * 2);
   // Draw large ring
-//  noStroke();
-//  fill(255);
-//  ellipse(25, 25, R2 * 2, R2 * 2);
+  //  noStroke();
+  //  fill(255);
+  //  ellipse(25, 25, R2 * 2, R2 * 2);
+  
 
   // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
@@ -149,13 +178,29 @@ function draw() {
   });
 
   translate(R2, R2);
-  strokeWeight(10);
   for (var i = 0; i < 44; i++) {
-    //    for (var j = 0; j < selDet.length; j += 180) {
     for (var k = 0; k < 180; k++) {
-
-      stroke(148, 0, selDet[countDay * 180 + k].Color)
-      line((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)));
+      if ((k + 1) % 24 == 0) {
+        strokeWeight(0.5);
+        stroke(210);
+        noFill();
+        ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
+      }
+      strokeWeight(10);
+      if (countDay > 21) {
+        stroke(148, 0, selDet[countDay * 180 + k].Color)
+      } else {
+        stroke(255, 215, selDet[countDay * 180 + k].Color)
+      }
+      // Yellow line starts at 0 countDay (First date in the dataset)
+      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
+      /*      
+            textFont();
+            textSize();
+            fill(50);
+            text(countDay.toString(), (R2 + (k+1) * timeRay) * sin(theta * (i + 1)), 
+            (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
+      */
 
       /*
         fill(220, 20, 60, selDet[j + k].Color)
@@ -166,7 +211,6 @@ function draw() {
 */
     }
     countDay++;
-    //    }
   }
 
 }
