@@ -35,6 +35,7 @@ var heightHour = heightTable / 15;
 var widthBar = widthTable / numBar;
 var count = 0;
 
+
 // object obs contains every row of the data set
 var obs = function(row) {
   this.longitude = row.getNum("Y");
@@ -117,55 +118,50 @@ function draw() {
 
   translate(-widthMap + widthTable * 0.5, heightMap * 1.2);
 
-
+  /* Ring visual variables */
   var R1 = 350; // Radius of big Ring   
-  var R2 = 25; // Radius of small Ring
+  var R2 = 80; // Radius of small Ring
   var startBarMargin = 2 * PI * R2 / 44; // starting points of rays in the small ring
   var endBarMargin = 2 * PI * R1 / 44; // starting points of rays in the large ring
   var heightRay = R1 - R2; // long side of rectangle
   var widthRay = endBarMargin * 0.7 // short side of rectangle 
   var theta = 2 * PI / 44;
   var timeRay = heightRay / 180;
+  var countDay = 0;
+  
+  // Draw small ring
+ // noStroke();
+  //fill(255);
+  //ellipse(25, 25, R1 * 2, R1 * 2);
+  // Draw large ring
+//  noStroke();
+//  fill(255);
+//  ellipse(25, 25, R2 * 2, R2 * 2);
 
-  // ellipseMode(RADIUS); 
-  //  stroke(255, 0, 0);
-  noStroke();
-  fill(255);
-  ellipse(25, 25, R1 * 2, R1 * 2);
-
-  // ellipseMode(CENTER);
-  //  stroke(0, 0, 255);
-  noStroke();
-  fill(255);
-  ellipse(25, 25, R2 * 2, R2 * 2);
-
-
+  // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
     return obj.ID == 1756;
   });
 
-  var countDay = 0;
-  console.log(selDet[1])
-  console.log(selDet.length)
-  translate(25, 25);
-  strokeWeight(20);
+  translate(R2, R2);
+  strokeWeight(10);
   for (var i = 0; i < 44; i++) {
-//    for (var j = 0; j < selDet.length; j += 180) {
-      for (var k = 0; k < 180; k++) {
-        
-        stroke(148,0,selDet[countDay*180 + k].Color)
-        line((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)));
+    //    for (var j = 0; j < selDet.length; j += 180) {
+    for (var k = 0; k < 180; k++) {
 
-        /*
+      stroke(148, 0, selDet[countDay * 180 + k].Color)
+      line((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)));
+
+      /*
         fill(220, 20, 60, selDet[j + k].Color)
         quad((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), 
         (R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1))+1, 
         (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)),
         (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1))+1);
 */
-      }
-      countDay++;
-//    }
+    }
+    countDay++;
+    //    }
   }
 
 }
