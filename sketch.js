@@ -51,6 +51,7 @@ var obs = function(row) {
   this.Time = row.getNum("TIME");
   this.Color = map(this.Vht, 0, 167, 255, 50);
   this.Order = row.getNum("ORDER");
+  this.Note = row.get("TEXT");
 }
 
 function preload() {
