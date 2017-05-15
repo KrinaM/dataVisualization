@@ -66,10 +66,7 @@ function preload() {
   //  rowsOUT = tableOUT.getRows();
   //  rowsBRU = tableBRU.getRows();
   //  rowsALL = tableALLuniq.getRows();
-
-
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
-
 }
 
 function setup() {
@@ -128,15 +125,15 @@ function draw() {
   var theta = 2 * PI / 44;
   var timeRay = heightRay / 180;
   var countDay = 0;
-  
+
   // Draw small ring
- // noStroke();
+  // noStroke();
   //fill(255);
   //ellipse(25, 25, R1 * 2, R1 * 2);
   // Draw large ring
-//  noStroke();
-//  fill(255);
-//  ellipse(25, 25, R2 * 2, R2 * 2);
+  //  noStroke();
+  //  fill(255);
+  //  ellipse(25, 25, R2 * 2, R2 * 2);
 
   // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
@@ -144,13 +141,30 @@ function draw() {
   });
 
   translate(R2, R2);
-  strokeWeight(10);
   for (var i = 0; i < 44; i++) {
-    //    for (var j = 0; j < selDet.length; j += 180) {
     for (var k = 0; k < 180; k++) {
-
-      stroke(148, 0, selDet[countDay * 180 + k].Color)
-      line((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)));
+      if ((k + 1) % 24 == 0) {
+        strokeWeight(1);
+        stroke(240);
+        noFill();
+        ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
+      }
+      strokeWeight(10);
+      if (countDay > 21) {
+        stroke(148, 0, selDet[countDay * 180 + k].Color)
+      } else {
+        stroke(255, 215, selDet[countDay * 180 + k].Color)
+      }
+      // Yellow line starts at 0 countDay (First date in the dataset)
+      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), 
+      (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
+      /*      
+            textFont();
+            textSize();
+            fill(50);
+            text(countDay.toString(), (R2 + (k+1) * timeRay) * sin(theta * (i + 1)), 
+            (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
+      */
 
       /*
         fill(220, 20, 60, selDet[j + k].Color)
@@ -161,7 +175,6 @@ function draw() {
 */
     }
     countDay++;
-    //    }
   }
 
 }
