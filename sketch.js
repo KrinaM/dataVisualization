@@ -83,10 +83,7 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
-  console.log(detectors[0].Note)
-  var detByMonth = detectors.sort(function(a, b) {
-    return a.Month > b.Month;
-});
+  
   //console.log(detByMonth[0])
   //console.log(detByMonth[1])
   image(detectorsImage, 270, margin);
@@ -106,34 +103,17 @@ function draw() {
   var selDay = detectors.filter(function(obj) {
     return (obj.Day == 1 && obj.Month == 3);
   });
- // console.log(selDay.length)
-/*
-  for (var i=0; i<28; i++) {
-      for (var k = 0; k < 180; k++) {
-          fill(46, 139, 87, selDay[count * 180 + k].Color)
-      (46, 139, 87, detectors[i].Color);
+  // console.log(selDay.length)
     
-      }
-  }
 
-*/
-
-    
-    j = 0;
-    for (var i = 0; i < detectors.length; i++) {
-      if (detectors[i].Day == 1 && detectors[i].Month == 3) {
-        //      if (detectors[i].ID == detectors[i - 1].ID) {
-        if (count < 180) {
-          noStroke();
-          fill(46, 139, 87, detectors[i].Color);
-          rect(j * widthBar, count * heightHour / 12, widthBar, heightHour / 12);
-          count++;
-        } else {
-          j++
-          count = 0;
-        }
-      }
+  for (var i = 0; i < 28; i++) {
+    for (var k = 0; k < 180; k++) {
+      noStroke(); 
+      fill(46, 139, 87, selDay[count * 180 + k].Color)
+      rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
+    count++; // count the detector
+  }
 
 
   for (var i = 1; i < numBar; i++) {
@@ -170,7 +150,7 @@ function draw() {
   //  noStroke();
   //  fill(255);
   //  ellipse(25, 25, R2 * 2, R2 * 2);
-  
+
 
   // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
@@ -201,14 +181,6 @@ function draw() {
             text(countDay.toString(), (R2 + (k+1) * timeRay) * sin(theta * (i + 1)), 
             (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
       */
-
-      /*
-        fill(220, 20, 60, selDet[j + k].Color)
-        quad((R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1)), 
-        (R2 + k * timeRay) * cos(theta * (i + 1)), (R2 + k * timeRay) * sin(theta * (i + 1))+1, 
-        (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)),
-        (R2 + (k + 1) * timeRay) * cos(theta * (i + 1)), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1))+1);
-*/
     }
     countDay++;
   }
