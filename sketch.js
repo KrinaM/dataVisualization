@@ -206,16 +206,6 @@ function draw() {
     drawRing(c);
     pop();
   }
-
-  /*
-    // white rectangle on top of Ring, useful when redraw
-    noStroke();
-    fill(255);
-    rect(widthCanvas - widthTable - margin, heightMap + margin, widthCanvas * 0.7, heightCanvas * 0.7);
-
-  */
-
-
 }
 
 // sienna	#A0522D	(160,82,45,int)
@@ -226,9 +216,7 @@ function draw() {
 //gold	#FFD700	(255,215,0)
 
 function drawRing(c) {
-  // var countDay = 0;
   // Choose observations with specific Order
-  //  console.log(countDay)
   selDet = detectors.filter(function(obj) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
@@ -252,15 +240,6 @@ function drawRing(c) {
       } else {
         stroke(255, 215, selDet[dayClicks * 180 + k].Color) // gold
       }
-
-
-      /*
-            if (countDay > 21) {
-              stroke(148, 0, selDet[countDay * 180 + k].Color) // dark violet
-            } else {
-              stroke(255, 215, selDet[countDay * 180 + k].Color) // gold
-            }
-      */
       // Yellow line starts at 0 countDay (First date in the dataset)
       line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
       /* 
@@ -271,11 +250,7 @@ function drawRing(c) {
             (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
       */
     }
-    //    if (countDay<43) {
     countDay++;
-    //  } else { 
-    //  countDay = 0;
-    //  }
   }
 }
 
