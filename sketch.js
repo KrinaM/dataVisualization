@@ -53,7 +53,7 @@ var theta = 2 * Math.PI / 44;
 var timeRay = heightRay / 180;
 var countDay = 0;
 
-countClicks = 0;
+var countClicks = 0;
 
 // object obs contains every row of the data set
 var obs = function(row) {
@@ -95,8 +95,6 @@ function preload() {
 
 function setup() {
   createCanvas(widthCanvas, heightCanvas);
-  noLoop();
-
   // ALL detectors image
   for (var r = 0; r < rowsALL.length; r++) {
     var thisDetectorALL = new obs(rowsALL[r]);
@@ -166,9 +164,11 @@ function setup() {
   }
 
   image(tableImage, 0, 0);
-  c = 1;
+  c = 5;
   translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
+
+  noLoop();
 }
 
 function draw() {
@@ -176,8 +176,10 @@ function draw() {
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
 
+
     push();
-    noStroke();
+    strokeWeight(4);
+    stroke(255);
     fill(255);
     rect(widthCanvas - widthTable, margin, widthTable, heightTable);
     pop();
@@ -202,7 +204,6 @@ function draw() {
     push();
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
-    //  console.log(c)
     drawRing(c);
     pop();
   }
@@ -221,7 +222,7 @@ function drawRing(c) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
   var dayClicks = countClicks * 44;
-
+  var cc =0;
   // console.log(dayClicks)
   // var countDay = 0;
   // Draw ring
@@ -236,12 +237,13 @@ function drawRing(c) {
       }
       strokeWeight(10);
       if (countDay - dayClicks > 21) {
-        stroke(148, 0, selDet[dayClicks * 180 + k].Color) // dark violet
+        stroke(148, 0, selDet[(dayClicks+cc) * 180 + k].Color) // dark violet
       } else {
-        stroke(255, 215, selDet[dayClicks * 180 + k].Color) // gold
+        stroke(255, 215, selDet[(dayClicks+cc) * 180 + k].Color) // gold
       }
       // Yellow line starts at 0 countDay (First date in the dataset)
-      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
+      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), 
+      (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
       /* 
             textFont();
             textSize();
@@ -250,6 +252,7 @@ function drawRing(c) {
             (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
       */
     }
+    cc++;
     countDay++;
   }
 }
@@ -258,9 +261,10 @@ function drawRing(c) {
 function mouseClicked() {
   if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
+    countClicks++;
   } else {
     trig = 0;
   }
-  countClicks++;
+
   redraw();
 }
