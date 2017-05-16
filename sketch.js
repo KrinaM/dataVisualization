@@ -15,16 +15,17 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 
 
 // Define variables
-var c=0, trig=0;
+var c = 0,
+  trig = 0;
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
-var rowsTest, tableTest;
+var rowsTest, tableTest
 var tableImage;
 var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-var selectedObject = 4;
+var selectedObject = 4; //Default selected object: order=4
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -40,6 +41,19 @@ var heightHour = heightTable / 15;
 var widthBar = widthTable / numBar;
 var count = 0;
 
+var numDetIN = 28; // number of detectors inner ring
+
+/* Ring visual variables */
+var R1 = 350; // Radius of big Ring   
+var R2 = 80; // Radius of small Ring
+var endBarMargin = 2 * Math.PI * R1 / 44; // starting points of rays in the large ring
+var heightRay = R1 - R2; // long side of rectangle
+var widthRay = endBarMargin * 0.7 // short side of rectangle 
+var theta = 2 * Math.PI / 44;
+var timeRay = heightRay / 180;
+var countDay = 0;
+
+
 
 // object obs contains every row of the data set
 var obs = function(row) {
@@ -49,8 +63,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude,  50.72, 51, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude,  4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -75,15 +89,15 @@ function preload() {
 
   detectorsImageALL = createGraphics(widthCanvas, heightCanvas);
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
-  
+
   tableImage = createGraphics(widthCanvas, heightCanvas);
 }
 
 function setup() {
   createCanvas(widthCanvas, heightCanvas);
   noLoop();
-  
-   // ALL detectors image
+
+  // ALL detectors image
   for (var r = 0; r < rowsALL.length; r++) {
     var thisDetectorALL = new obs(rowsALL[r]);
     detectorsImageALL.noStroke();
@@ -93,9 +107,9 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectorsALL.push(thisDetectorALL);
   }
-  
+
   image(detectorsImageALL, 220, margin);
-  
+
   // Inner Ring detectors
   for (var r = 0; r < rowsIN.length; r++) {
     var thisDetectorIN = new obs(rowsIN[r]);
@@ -107,43 +121,12 @@ function setup() {
     detectors.push(thisDetectorIN);
   }
   image(detectorsImage, 220, margin);
-}
 
-function draw() {
 
-// Interactivity Detectors
-   if (trig===1){
-        var c = floor((mouseX-0.55*widthCanvas)/widthBar);        
-        push();
-        noStroke();
-        fill(255);
-        rect(widthCanvas-widthTable,margin, widthTable, heightTable);
-        pop();
-        push();
-        image(tableImage,widthCanvas-widthTable,margin)
-        translate( .55 * widthCanvas + c * widthBar, margin); 
-        strokeWeight(4);
-        stroke(100,255,255);
-        rect(0, 0, widthBar, heightTable)
-        pop();
-        push();
-        fill(255);
-        image(detectorsImage, 220, margin);
-        noStroke();
-        fill(255, 0, 0);
-        ellipse(220+detectors[3960*c].X, margin+detectors[3960*c].Y, 10, 10);
-        pop();
-        
-        // selectedObject = c+1;
-        //console.log(selectedObject);
 
-    }
 
-// Draw Table
+  // Draw Table
   translate(widthCanvas - widthTable, margin);
-  //stroke(255);
-  //rect(0, 0, widthTable, heightTable);
-
   // filter data according to Day and month
   var selDay = detectors.filter(function(obj) {
     return (obj.Day == 1 && obj.Month == 3);
@@ -153,9 +136,8 @@ function draw() {
   var selDayOfWeek = detectors.filter(function(obj) {
     return (obj.Day % 5 == 1);
   });
-  
-  
-// Draw the rectangles for each observation
+
+  // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
@@ -170,7 +152,7 @@ function draw() {
     tableImage.strokeWeight(4);
     tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
-  
+
   // Text for hours
   for (var j = 5; j < 20; j++) {
     textSize(10);
@@ -178,65 +160,69 @@ function draw() {
     text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
   // Text for notes
-    for (var j = 0; j < 28; j++) {
+  for (var j = 0; j < 28; j++) {
     textSize(10);
     fill(0);
-    text(detectors[3960*j].Note, j*widthBar, -margin*0.5);
+    text(detectors[3960 * j].Note, j * widthBar, -margin * 0.5);
   }
-  
-  
-  image(tableImage,0,0);
-  
-  
-  // white rectangle on top of Ring, useful when redraw
+
+  image(tableImage, 0, 0);
+
+}
+
+function draw() {
+  // Interactivity Detectors
+  if (trig == 1) {
+    c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
+    console.log(c)
+    push();
     noStroke();
     fill(255);
-    rect(widthCanvas-widthTable-margin, heightMap+margin, widthCanvas*0.7, heightCanvas*0.7);
+    rect(widthCanvas - widthTable, margin, widthTable, heightTable);
+    pop();
 
+    push();
+    image(tableImage, widthCanvas - widthTable, margin)
+    translate(.55 * widthCanvas + c * widthBar, margin);
+    strokeWeight(4);
+    stroke(100, 255, 255);
+    noFill();
+    rect(0, 0, widthBar, heightTable)
+    pop();
 
-  translate(-widthTable*0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+    push();
+    fill(255);
+    image(detectorsImage, 220, margin);
+    noStroke();
+    fill(255, 0, 0);
+    ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
+    pop();
+  }
 
-  /* Ring visual variables */
-  var R1 = 350; // Radius of big Ring   
-  var R2 = 80; // Radius of small Ring
-  var startBarMargin = 2 * PI * R2 / 44; // starting points of rays in the small ring
-  var endBarMargin = 2 * PI * R1 / 44; // starting points of rays in the large ring
-  var heightRay = R1 - R2; // long side of rectangle
-  var widthRay = endBarMargin * 0.7 // short side of rectangle 
-  var theta = 2 * PI / 44;
-  var timeRay = heightRay / 180;
-  var countDay = 0;
+  /*
+    // white rectangle on top of Ring, useful when redraw
+    noStroke();
+    fill(255);
+    rect(widthCanvas - widthTable - margin, heightMap + margin, widthCanvas * 0.7, heightCanvas * 0.7);
 
-  // Draw small ring
-  // noStroke();
-  //fill(255);
-  //ellipse(25, 25, R1 * 2, R1 * 2);
-  // Draw large ring
-  //  noStroke();
-  //  fill(255);
-  //  ellipse(25, 25, R2 * 2, R2 * 2);
+  */
+  translate(widthCanvas - widthTable, margin);
+  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
-    console.log(selectedObject);
 
   // Choose observations with specific Order
-  if (trig===1){
-      var selDet = detectors.filter(function(obj) {
-        return (obj.Order == (floor((mouseX-0.55*widthCanvas)/widthBar)+1)); 
-        });
-console.log(selDet);
+  if (trig == 1) {
+    selDet = detectors.filter(function(obj) {
+      return (obj.Order = 4) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
+    });
+//    console.log(selDet[0].Order);
   } else {
-      var selDet = detectors.filter(function(obj) {
-        return (obj.Order == selectedObject);
-        });
-         }
-         
-         
-// if (trig===1) {   
-//    console.log((floor((mouseX-0.55*widthCanvas)/widthBar)+1));
-// }
-  
-  
-         
+    selDet = detectors.filter(function(obj) {
+      return (obj.Order = 1);
+    });
+  }
+
+  // Draw ring
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
     for (var k = 0; k < 180; k++) {
@@ -274,16 +260,13 @@ console.log(selDet);
 // crimson	#DC143C	(220,20,60)
 //gold	#FFD700	(255,215,0)
 
-// Interactivity for Detector
 
-function mouseClicked(){
-     if (mouseX > .55 * widthCanvas){
-         trig=1;
-     }
-     else{
-         trig=0;
-     }
-    redraw();
+
+function mouseClicked() {
+  if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
+    trig = 1;
+  } else {
+    trig = 0;
+  }
+  redraw();
 }
-
-
