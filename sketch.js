@@ -53,7 +53,7 @@ var theta = 2 * Math.PI / 44;
 var timeRay = heightRay / 180;
 var countDay = 0;
 
-
+countClicks = 0;
 
 // object obs contains every row of the data set
 var obs = function(row) {
@@ -121,7 +121,7 @@ function setup() {
     detectors.push(thisDetectorIN);
   }
   image(detectorsImage, 220, margin);
-  console.log(detectors.length)
+  //console.log(detectors.length)
 
 
   // Draw Table
@@ -175,7 +175,7 @@ function draw() {
   // Interactivity Detectors
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
-    console.log(c)
+
     push();
     noStroke();
     fill(255);
@@ -202,7 +202,7 @@ function draw() {
     push();
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
-    //    countDay = 0;
+    //  console.log(c)
     drawRing(c);
     pop();
   }
@@ -226,12 +226,16 @@ function draw() {
 //gold	#FFD700	(255,215,0)
 
 function drawRing(c) {
- // var countDay = 0;
+  // var countDay = 0;
   // Choose observations with specific Order
+  //  console.log(countDay)
   selDet = detectors.filter(function(obj) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
-  //var countDay = 0;
+  var dayClicks = countClicks * 44;
+
+  // console.log(dayClicks)
+  // var countDay = 0;
   // Draw ring
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
@@ -243,11 +247,20 @@ function drawRing(c) {
         ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
       }
       strokeWeight(10);
-      if (countDay > 21) {
-        stroke(148, 0, selDet[countDay * 180 + k].Color)
+      if (countDay - dayClicks > 21) {
+        stroke(148, 0, selDet[dayClicks * 180 + k].Color) // dark violet
       } else {
-        stroke(255, 215, selDet[countDay * 180 + k].Color)
+        stroke(255, 215, selDet[dayClicks * 180 + k].Color) // gold
       }
+
+
+      /*
+            if (countDay > 21) {
+              stroke(148, 0, selDet[countDay * 180 + k].Color) // dark violet
+            } else {
+              stroke(255, 215, selDet[countDay * 180 + k].Color) // gold
+            }
+      */
       // Yellow line starts at 0 countDay (First date in the dataset)
       line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
       /* 
@@ -258,11 +271,11 @@ function drawRing(c) {
             (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
       */
     }
-//    if (countDay<43) {
+    //    if (countDay<43) {
     countDay++;
-  //  } else { 
+    //  } else { 
     //  countDay = 0;
-  //  }
+    //  }
   }
 }
 
@@ -273,5 +286,6 @@ function mouseClicked() {
   } else {
     trig = 0;
   }
+  countClicks++;
   redraw();
 }
