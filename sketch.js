@@ -133,6 +133,7 @@ function setup() {
   var selDayOfWeek = detectors.filter(function(obj) {
     return (obj.Day % 5 == 1);
   });
+  //  console.log(selDayOfWeek)
 
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
@@ -164,7 +165,7 @@ function setup() {
   }
 
   image(tableImage, 0, 0);
-  c = 5;
+  c = 0;
   translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
 
@@ -176,14 +177,15 @@ function draw() {
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
 
-
+    // Draw outer table rectangle
     push();
     strokeWeight(4);
-    stroke(255);
+    stroke(255); //necessary to cover remaining blue stroke from interactivity
     fill(255);
     rect(widthCanvas - widthTable, margin, widthTable, heightTable);
     pop();
 
+    // Draw table bars
     push();
     image(tableImage, widthCanvas - widthTable, margin)
     translate(.55 * widthCanvas + c * widthBar, margin);
@@ -193,6 +195,7 @@ function draw() {
     rect(0, 0, widthBar, heightTable)
     pop();
 
+    // Draw detectors
     push();
     fill(255);
     image(detectorsImage, 220, margin);
@@ -201,6 +204,7 @@ function draw() {
     ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
     pop();
 
+    // Draw ring
     push();
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
@@ -221,10 +225,8 @@ function drawRing(c) {
   selDet = detectors.filter(function(obj) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
-  var dayClicks = countClicks * 44;
-  var cc =0;
-  // console.log(dayClicks)
-  // var countDay = 0;
+  var cc = 0;
+
   // Draw ring
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
@@ -236,14 +238,16 @@ function drawRing(c) {
         ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
       }
       strokeWeight(10);
-      if (countDay - dayClicks > 21) {
-        stroke(148, 0, selDet[(dayClicks+cc) * 180 + k].Color) // dark violet
+
+      if (cc > 21) {
+        stroke(148, 0, selDet[c* cc * 180 + k].Color) // dark violet
       } else {
-        stroke(255, 215, selDet[(dayClicks+cc) * 180 + k].Color) // gold
+        stroke(255, 215, selDet[c *cc * 180 + k].Color) // gold
       }
+
       // Yellow line starts at 0 countDay (First date in the dataset)
-      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), 
-      (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
+      line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
+
       /* 
             textFont();
             textSize();
@@ -253,7 +257,6 @@ function drawRing(c) {
       */
     }
     cc++;
-    countDay++;
   }
 }
 
@@ -265,6 +268,5 @@ function mouseClicked() {
   } else {
     trig = 0;
   }
-
   redraw();
 }
