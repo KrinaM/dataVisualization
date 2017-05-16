@@ -15,15 +15,16 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 
 
 // Define variables
-var c, trig=0;
+var c=0, trig=0;
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest;
+var tableImage;
 var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-var SelectedObject = 7;
+var selectedObject = 22;
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -74,6 +75,8 @@ function preload() {
 
   detectorsImageALL = createGraphics(widthCanvas, heightCanvas);
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
+  
+  tableImage = createGraphics(widthCanvas, heightCanvas);
 }
 
 function setup() {
@@ -110,20 +113,35 @@ function draw() {
 
 // Interactivity Detectors
    if (trig===1){
-        var c = floor((mouseX-0.55*widthCanvas)/widthBar);        
+        var c = floor((mouseX-0.55*widthCanvas)/widthBar);
+        // selectedObject = c+1;        
         push();
+        noStroke();
+        fill(255);
+        rect(widthCanvas-widthTable,margin, widthTable, heightTable);
+        pop();
+        push();
+        image(tableImage,widthCanvas-widthTable,margin)
         translate( .55 * widthCanvas + c * widthBar, margin); 
-        stroke(100,0,0);
+        strokeWeight(4);
+        stroke(100,255,255);
         rect(0, 0, widthBar, heightTable)
         pop();
+        push();
+        fill(255);
+        image(detectorsImage, 220, margin);
+        noStroke();
+        fill(255, 0, 0);
+        ellipse(220+detectors[3960*c].X, margin+detectors[3960*c].Y, 10, 10);
+        pop();
+        
 
-       SelectedObject = c;
     }
 
 // Draw Table
   translate(widthCanvas - widthTable, margin);
-  noStroke();
-  rect(0, 0, widthTable, heightTable);
+  //stroke(255);
+  //rect(0, 0, widthTable, heightTable);
 
   // filter data according to Day and month
   var selDay = detectors.filter(function(obj) {
@@ -139,24 +157,35 @@ function draw() {
 // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     for (var k = 0; k < 180; k++) {
-      noStroke();
-      fill(46, 139, 87, selDay[count * 180 + k].Color)
-      rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
+      tableImage.noStroke();
+      tableImage.fill(46, 139, 87, selDay[count * 180 + k].Color)
+      tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
     count++; // count the detector
   }
 
   for (var i = 1; i < numBar; i++) {
-    stroke(255);
-    strokeWeight(4);
-    line(i * widthBar, 0, i * widthBar, heightTable);
+    tableImage.stroke(255);
+    tableImage.strokeWeight(4);
+    tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
   
+  // Text for hours
   for (var j = 5; j < 20; j++) {
     textSize(10);
     fill(0);
     text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
+  // Text for notes
+    for (var j = 0; j < 28; j++) {
+    textSize(10);
+    fill(0);
+    text(detectors[3960*j].Note, j*widthBar, -margin*0.5);
+  }
+  
+  
+  image(tableImage,0,0);
+  
 
   translate(-widthTable*0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
@@ -183,7 +212,7 @@ function draw() {
 
   // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
-    return obj.Order == SelectedObject;
+    return obj.Order == selectedObject;
   });
 
   translate(R2, R2);
@@ -235,6 +264,5 @@ function mouseClicked(){
     console.log(mouseX);
     redraw();
 }
-
 
 
