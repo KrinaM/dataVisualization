@@ -24,7 +24,7 @@ var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-var selectedObject = 22;
+var selectedObject = 4;
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -113,8 +113,7 @@ function draw() {
 
 // Interactivity Detectors
    if (trig===1){
-        var c = floor((mouseX-0.55*widthCanvas)/widthBar);
-        // selectedObject = c+1;        
+        var c = floor((mouseX-0.55*widthCanvas)/widthBar);        
         push();
         noStroke();
         fill(255);
@@ -135,6 +134,8 @@ function draw() {
         ellipse(220+detectors[3960*c].X, margin+detectors[3960*c].Y, 10, 10);
         pop();
         
+        // selectedObject = c+1;
+        //console.log(selectedObject);
 
     }
 
@@ -186,6 +187,11 @@ function draw() {
   
   image(tableImage,0,0);
   
+  
+  // white rectangle on top of Ring, useful when redraw
+    noStroke();
+    fill(255);
+    rect(widthCanvas-widthTable-margin, heightMap+margin, widthCanvas*0.7, heightCanvas*0.7);
 
 
   translate(-widthTable*0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
@@ -210,12 +216,27 @@ function draw() {
   //  fill(255);
   //  ellipse(25, 25, R2 * 2, R2 * 2);
 
+    console.log(selectedObject);
 
-  // Choose observations with specific ID
-  var selDet = detectors.filter(function(obj) {
-    return obj.Order == selectedObject;
-  });
-
+  // Choose observations with specific Order
+  if (trig===1){
+      var selDet = detectors.filter(function(obj) {
+        return (obj.Order == (floor((mouseX-0.55*widthCanvas)/widthBar)+1)); 
+        });
+console.log(selDet);
+  } else {
+      var selDet = detectors.filter(function(obj) {
+        return (obj.Order == selectedObject);
+        });
+         }
+         
+         
+// if (trig===1) {   
+//    console.log((floor((mouseX-0.55*widthCanvas)/widthBar)+1));
+// }
+  
+  
+         
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
     for (var k = 0; k < 180; k++) {
@@ -262,7 +283,6 @@ function mouseClicked(){
      else{
          trig=0;
      }
-    console.log(mouseX);
     redraw();
 }
 
