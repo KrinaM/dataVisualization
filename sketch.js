@@ -121,8 +121,7 @@ function setup() {
     detectors.push(thisDetectorIN);
   }
   image(detectorsImage, 220, margin);
-
-
+  console.log(detectors.length)
 
 
   // Draw Table
@@ -167,7 +166,9 @@ function setup() {
   }
 
   image(tableImage, 0, 0);
-
+  c = 1;
+  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+  drawRing(c);
 }
 
 function draw() {
@@ -197,6 +198,13 @@ function draw() {
     fill(255, 0, 0);
     ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
     pop();
+
+    push();
+    translate(widthCanvas - widthTable, margin);
+    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+    //    countDay = 0;
+    drawRing(c);
+    pop();
   }
 
   /*
@@ -206,22 +214,24 @@ function draw() {
     rect(widthCanvas - widthTable - margin, heightMap + margin, widthCanvas * 0.7, heightCanvas * 0.7);
 
   */
-  translate(widthCanvas - widthTable, margin);
-  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
 
+}
+
+// sienna	#A0522D	(160,82,45,int)
+// dark orange	#FF8C00	(255,140,0) 
+// sea green	#2E8B57	(46,139,87)
+// 	dark violet	#9400D3	(148,0,211)
+// crimson	#DC143C	(220,20,60)
+//gold	#FFD700	(255,215,0)
+
+function drawRing(c) {
+ // var countDay = 0;
   // Choose observations with specific Order
-  if (trig == 1) {
-    selDet = detectors.filter(function(obj) {
-      return (obj.Order = 4) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
-    });
-//    console.log(selDet[0].Order);
-  } else {
-    selDet = detectors.filter(function(obj) {
-      return (obj.Order = 1);
-    });
-  }
-
+  selDet = detectors.filter(function(obj) {
+    return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
+  });
+  //var countDay = 0;
   // Draw ring
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
@@ -240,7 +250,7 @@ function draw() {
       }
       // Yellow line starts at 0 countDay (First date in the dataset)
       line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
-      /*      
+      /* 
             textFont();
             textSize();
             fill(50);
@@ -248,18 +258,13 @@ function draw() {
             (R2 + (k+1) * timeRay) * (-cos(theta * (i + 1))) );
       */
     }
+//    if (countDay<43) {
     countDay++;
+  //  } else { 
+    //  countDay = 0;
+  //  }
   }
-
 }
-
-// sienna	#A0522D	(160,82,45,int)
-// dark orange	#FF8C00	(255,140,0) 
-// sea green	#2E8B57	(46,139,87)
-// 	dark violet	#9400D3	(148,0,211)
-// crimson	#DC143C	(220,20,60)
-//gold	#FFD700	(255,215,0)
-
 
 
 function mouseClicked() {
