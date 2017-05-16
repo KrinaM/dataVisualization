@@ -15,12 +15,16 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 
 
 // Define variables
+var c, trig=0;
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest;
 var detectorsImage;
+var detectorsImageALL;
 var detectors = [];
-var heightCanvas = 1200;
+var detectorsALL = [];
+var SelectedObject = 7;
+var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
 var heightMap = heightCanvas * .25;
@@ -44,8 +48,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72422, 50.92, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude, 4.2, 4.48, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.Y = map(this.longitude,  50.72, 51, widthMap, 0); // 50.86, 51 --- 
+  this.X = map(this.lattitude,  4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -59,35 +63,64 @@ function preload() {
   tableIN = loadTable("BRUSSELSdataIN.csv", "csv", "header"); // Binnenring
   //  tableOUT = loadTable("BRUSSELSdataOUT.csv", "csv", "header"); // Buitenring
   //  tableBRU = loadTable("BRUSSELSdataBRU.csv", "csv", "header"); // Brussel
-  //  tableALLuniq = loadTable("det120uniqM.csv", "csv", "header"); // all detectors unique obs
+  tableALLuniq = loadTable("det120uniqM.csv", "csv", "header"); // all detectors unique obs
   //tableTest = loadTable("BRUdataSEL.csv", "csv", "header"); // all detectors unique obs
   //rowsTest = tableTest.getRows();
 
   rowsIN = tableIN.getRows();
   //  rowsOUT = tableOUT.getRows();
   //  rowsBRU = tableBRU.getRows();
-  //  rowsALL = tableALLuniq.getRows();
+  rowsALL = tableALLuniq.getRows();
 
+  detectorsImageALL = createGraphics(widthCanvas, heightCanvas);
   detectorsImage = createGraphics(widthCanvas, heightCanvas);
 }
 
 function setup() {
   createCanvas(widthCanvas, heightCanvas);
   noLoop();
+  
+   // ALL detectors image
+  for (var r = 0; r < rowsALL.length; r++) {
+    var thisDetectorALL = new obs(rowsALL[r]);
+    detectorsImageALL.noStroke();
+    detectorsImageALL.fill(160, 160, 160, 160);
+    detectorsImageALL.ellipse(thisDetectorALL.X, thisDetectorALL.Y, 10, 10);
+    //  detectorsImage.fill(0).strokeWeight(0).textSize(14);
+    //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
+    detectorsALL.push(thisDetectorALL);
+  }
+  
+  image(detectorsImageALL, 220, margin);
+  
+  // Inner Ring detectors
   for (var r = 0; r < rowsIN.length; r++) {
     var thisDetectorIN = new obs(rowsIN[r]);
     detectorsImage.noStroke();
-    detectorsImage.fill(160, 160, 160, 160);
+    detectorsImage.fill(0, 0, 0, 160);
     detectorsImage.ellipse(thisDetectorIN.X, thisDetectorIN.Y, 10, 10);
     //  detectorsImage.fill(0).strokeWeight(0).textSize(14);
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
-  image(detectorsImage, 270, margin);
+  image(detectorsImage, 220, margin);
 }
 
 function draw() {
-  // Draw Table
+
+// Interactivity Detectors
+   if (trig===1){
+        var c = floor((mouseX-0.55*widthCanvas)/widthBar);        
+        push();
+        translate( .55 * widthCanvas + c * widthBar, margin); 
+        stroke(100,0,0);
+        rect(0, 0, widthBar, heightTable)
+        pop();
+
+       SelectedObject = c;
+    }
+
+// Draw Table
   translate(widthCanvas - widthTable, margin);
   noStroke();
   rect(0, 0, widthTable, heightTable);
@@ -103,7 +136,7 @@ function draw() {
   });
   
   
-  // Draw the rectangles for each observation
+// Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     for (var k = 0; k < 180; k++) {
       noStroke();
@@ -125,7 +158,8 @@ function draw() {
     text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
 
-  translate(-widthTable * 0.9 - margin, heightMap * 2.3); // -widthMap + widthTable * 0.5, heightMap * 1.2
+
+  translate(-widthTable*0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
   /* Ring visual variables */
   var R1 = 350; // Radius of big Ring   
@@ -150,7 +184,7 @@ function draw() {
 
   // Choose observations with specific ID
   var selDet = detectors.filter(function(obj) {
-    return obj.ID == 1756;
+    return obj.Order == SelectedObject;
   });
 
   translate(R2, R2);
@@ -189,3 +223,19 @@ function draw() {
 // 	dark violet	#9400D3	(148,0,211)
 // crimson	#DC143C	(220,20,60)
 //gold	#FFD700	(255,215,0)
+
+// Interactivity for Detector
+
+function mouseClicked(){
+     if (mouseX > .55 * widthCanvas){
+         trig=1;
+     }
+     else{
+         trig=0;
+     }
+    console.log(mouseX);
+    redraw();
+}
+
+
+
