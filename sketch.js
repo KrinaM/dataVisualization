@@ -83,50 +83,47 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
-  
-  //console.log(detByMonth[0])
-  //console.log(detByMonth[1])
   image(detectorsImage, 270, margin);
 }
 
 function draw() {
-
   // Draw Table
   translate(widthCanvas - widthTable, margin);
-  // noStroke();
-  stroke(10)
+  noStroke();
   rect(0, 0, widthTable, heightTable);
 
-  //  for (var j=0; j<numBar; j++) {
-  //    count = 0;
-
+  // filter data according to Day and month
   var selDay = detectors.filter(function(obj) {
     return (obj.Day == 1 && obj.Month == 3);
   });
-  // console.log(selDay.length)
 
+  // select only Mondays for example
+  var selDayOfWeek = detectors.filter(function(obj) {
+    return (obj.Day % 5 == 1);
+  });
+  
+  
+  // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     for (var k = 0; k < 180; k++) {
-      noStroke(); 
+      noStroke();
       fill(46, 139, 87, selDay[count * 180 + k].Color)
       rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
     count++; // count the detector
   }
 
-
   for (var i = 1; i < numBar; i++) {
     stroke(255);
     strokeWeight(4);
     line(i * widthBar, 0, i * widthBar, heightTable);
   }
+  
   for (var j = 5; j < 20; j++) {
     textSize(10);
     fill(0);
     text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
-
-
 
   translate(-widthTable * 0.9 - margin, heightMap * 2.3); // -widthMap + widthTable * 0.5, heightMap * 1.2
 
