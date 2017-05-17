@@ -63,8 +63,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap);
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -166,7 +166,7 @@ function setup() {
 
   image(tableImage, 0, 0);
   c = 0;
-  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+  translate(-widthTable * 0.76, heightMap * 1.95);
   drawRing(c);
 
   noLoop();
@@ -207,7 +207,7 @@ function draw() {
     // Draw ring
     push();
     translate(widthCanvas - widthTable, margin);
-    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+    translate(-widthTable * 0.76, heightMap * 1.95); 
     drawRing(c);
     pop();
   }
@@ -242,7 +242,7 @@ function drawRing(c) {
       if (cc > 21) {
         stroke(148, 0, selDet[c* cc * 180 + k].Color) // dark violet
       } else {
-        stroke(255, 215, selDet[c *cc * 180 + k].Color) // gold
+        stroke(220, 40, selDet[c *cc * 180 + k].Color) // dark orange
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
