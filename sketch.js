@@ -129,16 +129,30 @@ function setup() {
     return (obj.Day == 1 && obj.Month == 3);
   });
 
+  var avgVht = [];
+  var selectedDay = 1;
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
+    avgVht = computeAvgVht(i + 1, selectedDay);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, selDay[count * 180 + k].Color)
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
       tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
-    count++; // count the detector
   }
 
+
+  /*
+    // Draw the rectangles for each observation
+    for (var i = 0; i < 28; i++) {
+      for (var k = 0; k < 180; k++) {
+        tableImage.noStroke();
+        tableImage.fill(46, 139, 87, selDay[i * 180 + k].Color)
+        tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
+      }
+  //    count++; // count the detector
+    }
+  */
   for (var i = 1; i < numBar; i++) {
     tableImage.stroke(255);
     tableImage.strokeWeight(4);
@@ -257,10 +271,11 @@ function drawRing(c) {
 
 function computeAvgVht(detOrder, dayOfWeek) {
   // select only Mondays for example
+  /*
   var selDayOfWeek = detectors.filter(function(obj) {
     return (obj.Day % 5 == 1);
   });
-
+*/
   var selDayDet = detectors.filter(function(obj) {
     return (obj.Day % 5 == dayOfWeek && obj.Order == detOrder);
   });
@@ -271,7 +286,6 @@ function computeAvgVht(detOrder, dayOfWeek) {
   for (var i = 0; i < sumVht.length; i++) {
     sumVht[i] = 0;
   }
-  //  console.log(sumVht)
   var ct = 1;
   for (var i = 0; i < selDayDet.length; i += 180) {
     for (var j = 0; j < 180; j++) {
@@ -283,9 +297,9 @@ function computeAvgVht(detOrder, dayOfWeek) {
     avg[i] = sumVht[i] / ct;
   }
 
-//  console.log(avg)
-//  console.log(selDayOfWeek.length)
-//  console.log(selDayDet.length)
+  //  console.log(avg)
+  //  console.log(selDayOfWeek.length)
+  //  console.log(selDayDet.length)
   return avg;
 }
 
