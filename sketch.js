@@ -53,7 +53,8 @@ var theta = 2 * Math.PI / 44;
 var timeRay = heightRay / 180;
 var countDay = 0;
 
-var countClicks = 0;
+var avgVht = [];
+var selectedDay = 1;
 
 // object obs contains every row of the data set
 var obs = function(row) {
@@ -125,12 +126,12 @@ function setup() {
   // Draw Table
   translate(widthCanvas - widthTable, margin);
   // filter data according to Day and month
-  var selDay = detectors.filter(function(obj) {
-    return (obj.Day == 1 && obj.Month == 3);
-  });
 
-  var avgVht = [];
-  var selectedDay = 1;
+  /*
+    var selDay = detectors.filter(function(obj) {
+      return (obj.Day == 1 && obj.Month == 3);
+    });
+  */
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
@@ -176,6 +177,32 @@ function setup() {
   c = 0;
   translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
+
+  // Create buttons for choice of day in the table
+  buttonMon = createButton('Monday');
+  buttonMon.position(20, 20);
+  buttonMon.size(100, 20);
+  buttonMon.mousePressed(chooseMon);
+  
+  buttonTue = createButton('Tuesday');
+  buttonTue.position(20, 40);
+  buttonTue.size(100, 20);
+  buttonTue.mousePressed(chooseTue);
+
+  buttonWed = createButton('Wednesday');
+  buttonWed.position(20, 60);
+  buttonWed.size(100, 20);
+  buttonWed.mousePressed(chooseWed);
+
+  buttonThu = createButton('Thursday');
+  buttonThu.position(20, 80);
+  buttonThu.size(100, 20);
+  buttonThu.mousePressed(chooseThu);
+
+  buttonFri = createButton('Friday');
+  buttonFri.position(20, 100);
+  buttonFri.size(100, 20);
+  buttonFri.mousePressed(chooseFri);
 
   noLoop();
 }
@@ -304,10 +331,31 @@ function computeAvgVht(detOrder, dayOfWeek) {
 }
 
 
+function chooseMon() {
+  selectedDay = 1;
+}
+
+function chooseTue() {
+  selectedDay = 2;
+}
+
+function chooseWed() {
+  selectedDay = 3;
+}
+
+function chooseThu() {
+  selectedDay = 4;
+}
+
+function chooseFri() {
+  selectedDay = 5;
+}
+
+
+
 function mouseClicked() {
   if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
-    countClicks++;
   } else {
     trig = 0;
   }
