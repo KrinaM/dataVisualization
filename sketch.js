@@ -129,12 +129,6 @@ function setup() {
     return (obj.Day == 1 && obj.Month == 3);
   });
 
-  // select only Mondays for example
-  var selDayOfWeek = detectors.filter(function(obj) {
-    return (obj.Day % 5 == 1);
-  });
-  //  console.log(selDayOfWeek)
-
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     for (var k = 0; k < 180; k++) {
@@ -240,9 +234,9 @@ function drawRing(c) {
       strokeWeight(10);
 
       if (cc > 21) {
-        stroke(148, 0, selDet[c* cc * 180 + k].Color) // dark violet
+        stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
       } else {
-        stroke(255, 215, selDet[c *cc * 180 + k].Color) // gold
+        stroke(255, 215, selDet[c * cc * 180 + k].Color) // gold
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
@@ -258,6 +252,41 @@ function drawRing(c) {
     }
     cc++;
   }
+}
+
+
+function computeAvgVht(detOrder, dayOfWeek) {
+  // select only Mondays for example
+  var selDayOfWeek = detectors.filter(function(obj) {
+    return (obj.Day % 5 == 1);
+  });
+
+  var selDayDet = detectors.filter(function(obj) {
+    return (obj.Day % 5 == dayOfWeek && obj.Order == detOrder);
+  });
+
+  // compute average Vht
+  var sumVht = new Array(180);
+  var avg = new Array(180);
+  for (var i = 0; i < sumVht.length; i++) {
+    sumVht[i] = 0;
+  }
+  //  console.log(sumVht)
+  var ct = 1;
+  for (var i = 0; i < selDayDet.length; i += 180) {
+    for (var j = 0; j < 180; j++) {
+      sumVht[j] += selDayDet[i + j].Vht;
+    }
+    ct++
+  }
+  for (var i = 0; i < 180; i++) {
+    avg[i] = sumVht[i] / ct;
+  }
+
+//  console.log(avg)
+//  console.log(selDayOfWeek.length)
+//  console.log(selDayDet.length)
+  return avg;
 }
 
 
