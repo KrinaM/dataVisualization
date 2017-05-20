@@ -14,9 +14,14 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
 
 
+
+// Add text fr day f.i. 'M' if selected day to display is Monay..
+
 // Define variables
 var c = 0,
   trig = 0;
+var maxVht = [];
+var minVht = [];
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest
@@ -25,7 +30,7 @@ var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-var selectedObject = 4; //Default selected object: order=4
+// var selectedObject = 1; //Default selected object: order=4
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -132,16 +137,26 @@ function setup() {
       return (obj.Day == 1 && obj.Month == 3);
     });
   */
+  
+  
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
+   // console.log(max(avgVht));
+   // console.log(min(avgVht));
+    maxVht[i] = max(avgVht);
+    minVht[i] = min(avgVht);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
       tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
-
+  
+  console.log(max(maxVht));
+  console.log(min(minVht));
+  //console.log(minVht);
+  // console.log(max(avgVht));
 
   /*
     // Draw the rectangles for each observation
@@ -276,6 +291,8 @@ function drawRing(c) {
 
       if (cc > 21) {
         stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
+        // fill(148, 0, 0, selDet[c * cc * 180 + k].Color)
+        // ellipse(5,5)
       } else {
         stroke(220, 40, selDet[c *cc * 180 + k].Color) // dark orange
       }
