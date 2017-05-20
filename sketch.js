@@ -198,7 +198,7 @@ function setup() {
   buttonMon.position(20, 20);
   buttonMon.size(100, 20);
   buttonMon.mousePressed(chooseMon);
-  
+
   buttonTue = createButton('Tuesday');
   buttonTue.position(20, 40);
   buttonTue.size(100, 20);
@@ -223,6 +223,7 @@ function setup() {
 }
 
 function draw() {
+  background(0, 0);
   // Interactivity Detectors
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
@@ -256,6 +257,7 @@ function draw() {
 
     // Draw ring
     push();
+    background(0, 0);
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); 
     drawRing(c);
@@ -287,7 +289,9 @@ function drawRing(c) {
         noFill();
         ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
       }
-      strokeWeight(10);
+
+      strokeMapWeight = map(selDet[c * cc * 180 + k].Vht, 167, 0, 2, 15);
+      strokeWeight(strokeMapWeight);
 
       if (cc > 21) {
         stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
@@ -376,5 +380,6 @@ function mouseClicked() {
   } else {
     trig = 0;
   }
+
   redraw();
 }
