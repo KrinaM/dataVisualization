@@ -124,7 +124,7 @@ function setup() {
 
 
   // Draw Table
-  translate(2* margin, widthRing+margin); // widthCanvas - widthTable
+  translate(widthCanvas - widthTable, margin);
   // filter data according to Day and month
 
   /*
@@ -137,8 +137,8 @@ function setup() {
     avgVht = computeAvgVht(i + 1, selectedDay);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
-      tableImage.rect(heightHour / 12 * k, widthBar * i, heightHour / 12, widthBar)
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
+      tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
 
@@ -157,17 +157,13 @@ function setup() {
   for (var i = 1; i < numBar; i++) {
     tableImage.stroke(255);
     tableImage.strokeWeight(4);
-    tableImage.line(margin, i * widthBar, heightTable, i * widthBar);
+    tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
-
   drawTableText();
 
- // rotate(HALF_PI);
   image(tableImage, 0, 0);
- // rotate(-HALF_PI);
   c = 0;
-  // translate(margin, widthRing);
-  translate(widthCanvas - widthRing*0.8, - widthRing*0.6 + margin); // -widthTable * 0.76, heightMap * 1.95
+  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
 
   // Create buttons for choice of day in the table
@@ -218,21 +214,20 @@ function draw() {
     strokeWeight(4);
     stroke(255); //necessary to cover remaining blue stroke from interactivity
     fill(255);
-    rect(margin, margin + heightCanvas*0.5, heightTable, widthTable);
+    rect(widthCanvas - widthTable, margin, widthTable, heightTable);
     pop();
 
     // Draw table bars
     push();
-    image(tableImage, margin, widthCanvas*0.5 + margin)
-    translate(2* margin, widthRing+margin)
+    image(tableImage, widthCanvas - widthTable, margin);
+    translate(widthCanvas - widthTable, margin);
     drawTableText();
-    translate(-2* margin, -widthRing-margin)
-    translate(margin, widthCanvas*0.5 + c * widthBar);
+    translate(-widthCanvas+widthTable, -margin)
     translate(.55 * widthCanvas + c * widthBar, margin);
     strokeWeight(4);
     stroke(100, 255, 255);
     noFill();
-    rect(0, 0, heightTable, widthBar)
+    rect(0, 0, widthBar, heightTable)
     pop();
 
     // Draw detectors
@@ -246,8 +241,8 @@ function draw() {
 
     // Draw ring
     push();
-    background(0, 0);
-    translate(widthCanvas -widthTable * 1.76, margin + heightMap * 1.95);  // 
+    translate(widthCanvas - widthTable, margin);
+    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
     drawRing(c);
     pop();
   }
@@ -364,21 +359,20 @@ function drawTableText() {
     textSize(10);
     fill(0);
     noStroke();
-    text(j + ":00", (j - 5) * heightTable / 14, -margin);
+    text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
   // Text for notes
   for (var j = 0; j < 28; j++) {
     textSize(10);
     fill(0);
     noStroke();
-    text(detectors[3960 * j].Note, -margin * 0.5, j * widthBar);
+    text(detectors[3960 * j].Note, j * widthBar, -margin * 0.5);
   }
 
 }
 
 function mouseClicked() {
-  if (mouseX > margin && mouseY > heightCanvas - widthTable ) {
- // if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
+  if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
     clear();
   } else {
