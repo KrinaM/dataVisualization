@@ -14,9 +14,14 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
 
 
+
+// Add text fr day f.i. 'M' if selected day to display is Monay..
+
 // Define variables
 var c = 0,
   trig = 0;
+var maxVht = [];
+var minVht = [];
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest
@@ -25,7 +30,7 @@ var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-var selectedObject = 4; //Default selected object: order=4
+// var selectedObject = 1; //Default selected object: order=4
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -64,8 +69,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap);
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -132,16 +137,26 @@ function setup() {
       return (obj.Day == 1 && obj.Month == 3);
     });
   */
+  
+  
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
+   // console.log(max(avgVht));
+   // console.log(min(avgVht));
+    maxVht[i] = max(avgVht);
+    minVht[i] = min(avgVht);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
       tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
-
+  
+  console.log(max(maxVht));
+  console.log(min(minVht));
+  //console.log(minVht);
+  // console.log(max(avgVht));
 
   /*
     // Draw the rectangles for each observation
@@ -175,7 +190,7 @@ function setup() {
 
   image(tableImage, 0, 0);
   c = 0;
-  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+  translate(-widthTable * 0.76, heightMap * 1.95);
   drawRing(c);
 
   // Create buttons for choice of day in the table
@@ -244,7 +259,7 @@ function draw() {
     push();
     background(0, 0);
     translate(widthCanvas - widthTable, margin);
-    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
+    translate(-widthTable * 0.76, heightMap * 1.95); 
     drawRing(c);
     pop();
   }
@@ -280,8 +295,10 @@ function drawRing(c) {
 
       if (cc > 21) {
         stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
+        // fill(148, 0, 0, selDet[c * cc * 180 + k].Color)
+        // ellipse(5,5)
       } else {
-        stroke(255, 215, selDet[c * cc * 180 + k].Color) // gold
+        stroke(220, 40, selDet[c *cc * 180 + k].Color) // dark orange
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
