@@ -14,14 +14,9 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
 
 
-
-// Add text fr day f.i. 'M' if selected day to display is Monay..
-
 // Define variables
 var c = 0,
   trig = 0;
-var maxVht = [];
-var minVht = [];
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest
@@ -30,7 +25,7 @@ var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-// var selectedObject = 1; //Default selected object: order=4
+var selectedObject = 4; //Default selected object: order=4
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -69,8 +64,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap);
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -137,21 +132,16 @@ function setup() {
       return (obj.Day == 1 && obj.Month == 3);
     });
   */
-  
-  
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
-   // console.log(max(avgVht));
-   // console.log(min(avgVht));
-    maxVht[i] = max(avgVht);
-    minVht[i] = min(avgVht);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
       tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
       tableImage.rect(heightHour / 12 * k, widthBar * i, heightHour / 12, widthBar)
     }
   }
+
 
   /*
     // Draw the rectangles for each observation
@@ -170,18 +160,7 @@ function setup() {
     tableImage.line(margin, i * widthBar, heightTable, i * widthBar);
   }
 
-  // Text for hours
-  for (var j = 5; j < 20; j++) {
-    textSize(10);
-    fill(0);
-    text(j + ":00", (j - 5) * heightTable / 14,  -margin);
-  }
-  // Text for notes
-  for (var j = 0; j < 28; j++) {
-    textSize(10);
-    fill(0);
-    text(detectors[3960 * j].Note, -margin * 0.5, j * widthBar);
-  }
+  drawTableText();
 
  // rotate(HALF_PI);
   image(tableImage, 0, 0);
@@ -222,6 +201,14 @@ function setup() {
 
 function draw() {
   background(0, 0);
+
+  image(detectorsImageALL, 220, margin);
+  image(detectorsImage, 220, margin);
+  /*
+    translate(widthCanvas - widthTable, margin);
+    drawTableText();
+    translate(widthTable-widthCanvas, -margin)
+  */
   // Interactivity Detectors
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
@@ -237,7 +224,11 @@ function draw() {
     // Draw table bars
     push();
     image(tableImage, margin, widthCanvas*0.5 + margin)
+    translate(2* margin, widthRing+margin)
+    drawTableText();
+    translate(-2* margin, -widthRing-margin)
     translate(margin, widthCanvas*0.5 + c * widthBar);
+    translate(.55 * widthCanvas + c * widthBar, margin);
     strokeWeight(4);
     stroke(100, 255, 255);
     noFill();
@@ -292,10 +283,8 @@ function drawRing(c) {
 
       if (cc > 21) {
         stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
-        // fill(148, 0, 0, selDet[c * cc * 180 + k].Color)
-        // ellipse(5,5)
       } else {
-        stroke(220, 40, selDet[c *cc * 180 + k].Color) // dark orange
+        stroke(255, 215, selDet[c * cc * 180 + k].Color) // gold
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
@@ -369,12 +358,29 @@ function chooseFri() {
   selectedDay = 5;
 }
 
+function drawTableText() {
+  // Text for hours
+  for (var j = 5; j < 20; j++) {
+    textSize(10);
+    fill(0);
+    noStroke();
+    text(j + ":00", (j - 5) * heightTable / 14, -margin);
+  }
+  // Text for notes
+  for (var j = 0; j < 28; j++) {
+    textSize(10);
+    fill(0);
+    noStroke();
+    text(detectors[3960 * j].Note, -margin * 0.5, j * widthBar);
+  }
 
+}
 
 function mouseClicked() {
   if (mouseX > margin && mouseY > heightCanvas - widthTable ) {
  // if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
+    clear();
   } else {
     trig = 0;
   }
