@@ -262,7 +262,7 @@ function drawRing(c) {
   selDet = detectors.filter(function(obj) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
-  var cc = 0;
+  var cc = 0; 
 
   // Draw ring
   translate(R2, R2);
