@@ -14,14 +14,9 @@ Authors: Krina Menounou, Danai Kafetzaki, Michael Christidis
 */
 
 
-
-// Add text fr day f.i. 'M' if selected day to display is Monay..
-
 // Define variables
 var c = 0,
   trig = 0;
-var maxVht = [];
-var minVht = [];
 var tableIN, tableOUT, tableBRU;
 var rowsIN, rowsOUT, rowsBRU;
 var rowsTest, tableTest
@@ -30,7 +25,7 @@ var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
 var detectorsALL = [];
-// var selectedObject = 1; //Default selected object: order=4
+var selectedObject = 4; //Default selected object: order=4
 var heightCanvas = 1400;
 var widthCanvas = 1400;
 var widthMap = widthCanvas * .25;
@@ -69,8 +64,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap);
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -137,26 +132,16 @@ function setup() {
       return (obj.Day == 1 && obj.Month == 3);
     });
   */
-  
-  
   // Draw the rectangles for each observation
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
-   // console.log(max(avgVht));
-   // console.log(min(avgVht));
-    maxVht[i] = max(avgVht);
-    minVht[i] = min(avgVht);
     for (var k = 0; k < 180; k++) {
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
       tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
-  
-  console.log(max(maxVht));
-  console.log(min(minVht));
-  //console.log(minVht);
-  // console.log(max(avgVht));
+
 
   /*
     // Draw the rectangles for each observation
@@ -174,23 +159,11 @@ function setup() {
     tableImage.strokeWeight(4);
     tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
-
-  // Text for hours
-  for (var j = 5; j < 20; j++) {
-    textSize(10);
-    fill(0);
-    text(j + ":00", -margin, (j - 5) * heightTable / 14);
-  }
-  // Text for notes
-  for (var j = 0; j < 28; j++) {
-    textSize(10);
-    fill(0);
-    text(detectors[3960 * j].Note, j * widthBar, -margin * 0.5);
-  }
+  drawTableText();
 
   image(tableImage, 0, 0);
   c = 0;
-  translate(-widthTable * 0.76, heightMap * 1.95);
+  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
 
   // Create buttons for choice of day in the table
@@ -224,6 +197,14 @@ function setup() {
 
 function draw() {
   background(0, 0);
+
+  image(detectorsImageALL, 220, margin);
+  image(detectorsImage, 220, margin);
+  /*
+    translate(widthCanvas - widthTable, margin);
+    drawTableText();
+    translate(widthTable-widthCanvas, -margin)
+  */
   // Interactivity Detectors
   if (trig == 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
@@ -238,7 +219,10 @@ function draw() {
 
     // Draw table bars
     push();
-    image(tableImage, widthCanvas - widthTable, margin)
+    image(tableImage, widthCanvas - widthTable, margin);
+    translate(widthCanvas - widthTable, margin);
+    drawTableText();
+    translate(-widthCanvas+widthTable, -margin)
     translate(.55 * widthCanvas + c * widthBar, margin);
     strokeWeight(4);
     stroke(100, 255, 255);
@@ -257,9 +241,8 @@ function draw() {
 
     // Draw ring
     push();
-    background(0, 0);
     translate(widthCanvas - widthTable, margin);
-    translate(-widthTable * 0.76, heightMap * 1.95); 
+    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
     drawRing(c);
     pop();
   }
@@ -277,7 +260,7 @@ function drawRing(c) {
   selDet = detectors.filter(function(obj) {
     return (obj.Order = c + 1) //(floor((mouseX - 0.55 * widthCanvas) / widthBar) + 1));
   });
-  var cc = 0; 
+  var cc = 0;
 
   // Draw ring
   translate(R2, R2);
@@ -295,10 +278,8 @@ function drawRing(c) {
 
       if (cc > 21) {
         stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
-        // fill(148, 0, 0, selDet[c * cc * 180 + k].Color)
-        // ellipse(5,5)
       } else {
-        stroke(220, 40, selDet[c *cc * 180 + k].Color) // dark orange
+        stroke(255, 215, selDet[c * cc * 180 + k].Color) // gold
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
@@ -372,11 +353,28 @@ function chooseFri() {
   selectedDay = 5;
 }
 
+function drawTableText() {
+  // Text for hours
+  for (var j = 5; j < 20; j++) {
+    textSize(10);
+    fill(0);
+    noStroke();
+    text(j + ":00", -margin, (j - 5) * heightTable / 14);
+  }
+  // Text for notes
+  for (var j = 0; j < 28; j++) {
+    textSize(10);
+    fill(0);
+    noStroke();
+    text(detectors[3960 * j].Note, j * widthBar, -margin * 0.5);
+  }
 
+}
 
 function mouseClicked() {
   if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
+    clear();
   } else {
     trig = 0;
   }
