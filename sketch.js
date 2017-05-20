@@ -70,6 +70,7 @@ var obs = function(row) {
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
   this.Color = map(this.Vht, 0, 167, 255, 50);
+  this.ColorRing = map(this.Vht, 0, 167, 100, 20);
   this.Order = row.getNum("ORDER");
   this.Note = row.get("TEXT");
 }
@@ -99,6 +100,7 @@ function setup() {
   // ALL detectors image
   for (var r = 0; r < rowsALL.length; r++) {
     var thisDetectorALL = new obs(rowsALL[r]);
+    colorMode(RGB, 255);
     detectorsImageALL.noStroke();
     detectorsImageALL.fill(160, 160, 160, 160);
     detectorsImageALL.ellipse(thisDetectorALL.X, thisDetectorALL.Y, 10, 10);
@@ -112,6 +114,7 @@ function setup() {
   // Inner Ring detectors
   for (var r = 0; r < rowsIN.length; r++) {
     var thisDetectorIN = new obs(rowsIN[r]);
+    colorMode(RGB, 255);
     detectorsImage.noStroke();
     detectorsImage.fill(0, 0, 0, 160);
     detectorsImage.ellipse(thisDetectorIN.X, thisDetectorIN.Y, 10, 10);
@@ -124,7 +127,7 @@ function setup() {
 
 
   // Draw Table
-  translate(2* margin, widthRing+margin); // widthCanvas - widthTable
+  translate(widthCanvas - widthTable, margin);
   // filter data according to Day and month
 
   /*
@@ -136,9 +139,10 @@ function setup() {
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDay);
     for (var k = 0; k < 180; k++) {
+      colorMode(RGB, 255);
       tableImage.noStroke();
-      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 125, 255, 50));
-      tableImage.rect(heightHour / 12 * k, widthBar * i, heightHour / 12, widthBar)
+      tableImage.fill(46, 139, 87, map(avgVht[k], 0, 167, 255, 50));
+      tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
 
@@ -157,17 +161,13 @@ function setup() {
   for (var i = 1; i < numBar; i++) {
     tableImage.stroke(255);
     tableImage.strokeWeight(4);
-    tableImage.line(margin, i * widthBar, heightTable, i * widthBar);
+    tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
-
   drawTableText();
 
- // rotate(HALF_PI);
   image(tableImage, 0, 0);
- // rotate(-HALF_PI);
   c = 0;
-  // translate(margin, widthRing);
-  translate(widthCanvas - widthRing*0.8, - widthRing*0.6 + margin); // -widthTable * 0.76, heightMap * 1.95
+  translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c);
 
   // Create buttons for choice of day in the table
@@ -215,39 +215,41 @@ function draw() {
 
     // Draw outer table rectangle
     push();
+    colorMode(RGB, 255);
     strokeWeight(4);
     stroke(255); //necessary to cover remaining blue stroke from interactivity
     fill(255);
-    rect(margin, margin + heightCanvas*0.5, heightTable, widthTable);
+    rect(widthCanvas - widthTable, margin, widthTable, heightTable);
     pop();
 
     // Draw table bars
     push();
-    image(tableImage, margin, widthCanvas*0.5 + margin)
-    translate(2* margin, widthRing+margin)
+    colorMode(RGB, 255);
+    image(tableImage, widthCanvas - widthTable, margin);
+    translate(widthCanvas - widthTable, margin);
     drawTableText();
-    translate(-2* margin, -widthRing-margin)
-    translate(margin, widthCanvas*0.5 + c * widthBar);
+    translate(-widthCanvas+widthTable, -margin)
     translate(.55 * widthCanvas + c * widthBar, margin);
     strokeWeight(4);
-    stroke(100, 255, 255);
+    stroke(255, 80, 80);
     noFill();
-    rect(0, 0, heightTable, widthBar)
+    rect(0, 0, widthBar, heightTable)
     pop();
 
     // Draw detectors
     push();
+    colorMode(RGB, 255);
     fill(255);
     image(detectorsImage, 220, margin);
     noStroke();
-    fill(255, 0, 0);
+    fill(255, 80, 80);
     ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
     pop();
 
     // Draw ring
     push();
-    background(0, 0);
-    translate(widthCanvas -widthTable * 1.76, margin + heightMap * 1.95);  // 
+    translate(widthCanvas - widthTable, margin);
+    translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
     drawRing(c);
     pop();
   }
@@ -268,11 +270,13 @@ function drawRing(c) {
   var cc = 0;
 
   // Draw ring
+  
   translate(R2, R2);
   for (var i = 0; i < 44; i++) {
     for (var k = 0; k < 180; k++) {
       if ((k + 1) % 24 == 0) {
         strokeWeight(0.5);
+        colorMode(RGB, 255);
         stroke(210);
         noFill();
         ellipse(0, 0, (2 * (R2 + k * timeRay)) * cos(theta));
@@ -281,10 +285,11 @@ function drawRing(c) {
       strokeMapWeight = map(selDet[c * cc * 180 + k].Vht, 167, 0, 2, 15);
       strokeWeight(strokeMapWeight);
 
+      colorMode(HSB);
       if (cc > 21) {
-        stroke(148, 0, selDet[c * cc * 180 + k].Color) // dark violet
+        stroke(242, 100, selDet[c * cc * 180 + k].ColorRing) // blue = March
       } else {
-        stroke(255, 215, selDet[c * cc * 180 + k].Color) // gold
+        stroke(22, 100, selDet[c * cc * 180 + k].ColorRing) // orange = October
       }
 
       // Yellow line starts at 0 countDay (First date in the dataset)
@@ -364,21 +369,20 @@ function drawTableText() {
     textSize(10);
     fill(0);
     noStroke();
-    text(j + ":00", (j - 5) * heightTable / 14, -margin);
+    text(j + ":00", -margin, (j - 5) * heightTable / 14);
   }
   // Text for notes
   for (var j = 0; j < 28; j++) {
     textSize(10);
     fill(0);
     noStroke();
-    text(detectors[3960 * j].Note, -margin * 0.5, j * widthBar);
+    text(detectors[3960 * j].Note, j * widthBar, -margin * 0.5);
   }
 
 }
 
 function mouseClicked() {
-  if (mouseX > margin && mouseY > heightCanvas - widthTable ) {
- // if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
+  if (mouseX > .55 * widthCanvas && mouseX < .55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
     clear();
   } else {
@@ -387,3 +391,15 @@ function mouseClicked() {
 
   redraw();
 }
+
+
+/*
+EX: Exit 
+aO: After Outgoing
+bI: Before Incoming
+RI: Ring
+N8: Incoming N8
+P/E: Paraller Ring & Exit
+SR: Side Road
+TL: Tunnel
+*/
