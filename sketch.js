@@ -70,7 +70,7 @@ var obs = function(row) {
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
   this.Color = map(this.Vht, 0, 167, 255, 50);
-  this.ColorRing = map(this.Vht, 0, 167, 100, 20);
+  this.ColorRing = map(this.Vht, 0, 167, 50, 100);
   this.Order = row.getNum("ORDER");
   this.Note = row.get("TEXT");
 }
@@ -231,7 +231,7 @@ function draw() {
     translate(-widthCanvas+widthTable, -margin)
     translate(.55 * widthCanvas + c * widthBar, margin);
     strokeWeight(4);
-    stroke(255, 80, 80);
+    stroke(255, 215, 0);
     noFill();
     rect(0, 0, widthBar, heightTable)
     pop();
@@ -242,7 +242,7 @@ function draw() {
     fill(255);
     image(detectorsImage, 220, margin);
     noStroke();
-    fill(255, 80, 80);
+    fill(255, 215, 0);
     ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
     pop();
 
@@ -392,8 +392,24 @@ function mouseClicked() {
   redraw();
 }
 
-
 /*
+RefTable = 
+for (var j = 0; j < 8; j++) {
+    textSize(10);
+    fill(0);
+    noStroke();
+    text(RefTable[j], widthCanvas - margin, j * widthTable / 8);
+    }
+
+
+var data = ['name':'France', 
+            'name':'France', 
+            'name':'France', 
+            'name':'France',
+            'name':'France',
+            'name':'France'];
+
+
 EX: Exit 
 aO: After Outgoing
 bI: Before Incoming
