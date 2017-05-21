@@ -54,11 +54,17 @@ var timeRay = heightRay / 180;
 var countDay = 0;
 
 var avgVht = [];
-var selectedDay = 1;
+var selectedDay = 4;
 
-var selectedDayPeak = 1; //selected day for average in ring
-var peakHour = 1; //selected peak hour (morning 6-9am or afternoon 3-6pm)
-var detOrderPeak = 1; // selected order of detector for average peak
+//var selectedDayPeak = 1; //selected day for average in ring
+//var peakHour = 1; //selected peak hour (morning 6-9am or afternoon 3-6pm)
+//var detOrderPeak = 1; // selected order of detector for average peak
+var avgDetPeak1 = [
+  []
+]; //average per day and detector for morning peak 
+var avgDetPeak2 = [
+  []
+]; //average per day and detector for afternoon peak 
 // object obs contains every row of the data set
 var obs = function(row) {
   this.longitude = row.getNum("Y");
@@ -67,8 +73,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0); // 50.86, 51 --- 
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); // 4, 4.6 4.013617, 4.923672 -- 3.98 , 4.9237 --- 
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); 
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -125,12 +131,27 @@ function setup() {
     //    detectorsImage.text((thisDetectorIN.ID).toString(), thisDetectorIN.X, thisDetectorIN.Y)
     detectors.push(thisDetectorIN);
   }
+
+
+  /*
+  for (var j = 1; j < 45; j++) {
+    for (var i = 1; i < 29; i++) {
+      averPeak = computeAvgVhtPeak(i, j, 2);
+    //  console.log("i");
+    //  console.log(i);
+    //  console.log("j");
+    //  console.log(j);
+    //  console.log(averPeak)
+    }
+  }
+  
+  */
   image(detectorsImage, 220, margin);
   //console.log(detectors.length)
 
-  var averPeak = computeAvgVhtPeak(1, 1, 2);
-  console.log(averPeak)
-    // Draw color reference bars
+  //  var averPeak = computeAvgVhtPeak(1, 44, 2);
+  //  console.log(averPeak)
+  // Draw color reference bars
   drawColorBars();
   // Draw Table
   translate(widthCanvas - widthTable, margin);
@@ -153,17 +174,6 @@ function setup() {
   }
 
 
-  /*
-    // Draw the rectangles for each observation
-    for (var i = 0; i < 28; i++) {
-      for (var k = 0; k < 180; k++) {
-        tableImage.noStroke();
-        tableImage.fill(46, 139, 87, selDay[i * 180 + k].Color)
-        tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
-      }
-  //    count++; // count the detector
-    }
-  */
   for (var i = 1; i < numBar; i++) {
     tableImage.stroke(255);
     tableImage.strokeWeight(4);
@@ -174,7 +184,12 @@ function setup() {
   image(tableImage, 0, 0);
   c = 0;
   translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
-  drawRing(c);
+  drawRing(c)
+
+
+
+
+
 
   // Create buttons for choice of day in the table
   buttonMon = createButton('Monday');
@@ -257,11 +272,10 @@ function draw() {
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
     drawRing(c);
+ //       averPeak = computeAvgVhtPeak(c, 1, 1);
+
     pop();
   }
-  //    computeAvgVhtPeak(1, 1, 1);
-  //  console.log(computeAvgVhtPeak)
-
 }
 
 // sienna	#A0522D	(160,82,45,int)
@@ -270,6 +284,40 @@ function draw() {
 // 	dark violet	#9400D3	(148,0,211)
 // crimson	#DC143C	(220,20,60)
 //gold	#FFD700	(255,215,0)
+
+function computeAvgVhtPeak(detOrderPeak, selectedDayPeak, peakHour) {
+  // select detector and specific day
+   var selDayPeak = [];
+    while (selDayPeak.length > 0) {
+    selDayPeak.pop();
+  }
+
+  if (selectedDayPeak <= 22) {
+    selDayPeak = detectors.filter(function(obj) {
+      return ((obj.Day == selectedDayPeak && obj.Order == detOrderPeak)  && obj.Month == 10);
+    });
+  } else {
+    selDayPeak = detectors.filter(function(obj) {
+      return (obj.Day == (selectedDayPeak - 22) && obj.Order == detOrderPeak && obj.Month == 10 );
+    });
+  }
+  console.log(selDayPeak.length)
+  var sumPeak = 0;
+  // compute average Vht
+  if (peakHour == 1) {
+    for (var i = 12; i < 48; i++) {
+      sumPeak += selDayPeak[i].Vht;
+    }
+  } else {
+    for (var i = 108; i < 108 + 36; i++) {
+      sumPeak += selDayPeak[i].Vht
+    }
+  }
+
+  avgPeak = sumPeak / 36;
+  return avgPeak;
+}
+
 
 function drawRing(c) {
   // Choose observations with specific Order
@@ -303,10 +351,8 @@ function drawRing(c) {
 
       // Yellow line starts at 0 countDay (First date in the dataset)
       line((R2 + k * timeRay) * sin(theta * (i + 1)), (R2 + k * timeRay) * (-cos(theta * (i + 1))), (R2 + (k + 1) * timeRay) * sin(theta * (i + 1)), (R2 + (k + 1) * timeRay) * (-cos(theta * (i + 1))));
-
-    //       var p1 = computeAvgVhtPeak(c+1, i+1, 1);
-    //      var p2 = computeAvgVhtPeak(c+1, i+1, 1);
     }
+
     noStroke()
     fill(0);
     if (cc % 5 == 0 && cc < 22) {
@@ -323,6 +369,7 @@ function drawRing(c) {
         text("M", (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
       }
     }
+//    text(cc, (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
     cc++;
   }
 }
@@ -355,40 +402,7 @@ function computeAvgVht(detOrder, dayOfWeek) {
   for (var i = 0; i < 180; i++) {
     avg[i] = sumVht[i] / ct;
   }
-
-  //  console.log(avg)
-  //  console.log(selDayOfWeek.length)
-  //  console.log(selDayDet.length)
   return avg;
-}
-
-
-function computeAvgVhtPeak(detOrderPeak, selectedDayPeak, peakHour) {
-  // select detector and specific day
-  if (selectedDayPeak <= 22) {
-    var selDayPeak = detectors.filter(function(obj) {
-      return (obj.Month == 3 && obj.Day == selectedDayPeak && obj.Order == detOrderPeak);
-    });
-  } else {
-    var selDayPeak = detectors.filter(function(obj) {
-      return (obj.Month == 10 && obj.Day == selectedDayPeak && obj.Order == detOrderPeak);
-    });
-
-  }
-  var sumPeak = 0;
-  // compute average Vht
-  if (peakHour == 1) {
-    for (var i = 12; i < 48; i++) {
-      sumPeak += selDayPeak[i].Vht
-    }
-  } else {
-    for (var i = 108; i < 108 + 36; i++) {
-      sumPeak += selDayPeak[i].Vht
-    }
-
-  }
-  avgPeak = sumPeak / 36;
-  return avgPeak;
 }
 
 
@@ -462,13 +476,13 @@ function drawColorBars() {
   noStroke()
   fill(0)
   textSize(10);
-  text("March", 1.5 * margin, 165 + heightTable / 4 + margin)
+  text("October", 1.5 * margin, 165 + heightTable / 4 + margin)
   stroke(22, 100, 175)
   point(margin, 180 + heightTable / 4 + margin)
   noStroke()
   fill(0)
   textSize(10);
-  text("October", 1.5 * margin, 20 + 165 + heightTable / 4 + margin)
+  text("March", 1.5 * margin, 20 + 165 + heightTable / 4 + margin)
   noStroke();
   colorMode(RGB, 225, 255, 255, 255);
   fill(46, 139, 87, 102);
@@ -477,7 +491,6 @@ function drawColorBars() {
   fill(0)
   textSize(10);
   text("Average Speed", 1.5 * margin, 35 + 170 + heightTable / 4 + margin)
-
   translate(0, 80);
 }
 
