@@ -24,9 +24,9 @@ var tableImage;
 var detectorsImage;
 var detectorsImageALL;
 var detectors = [];
-var maxAvg=[];
-var minAvg=[];
-var sumAvg=[];
+var maxAvg = [];
+var minAvg = [];
+var sumAvg = [];
 var overallAvg = [];
 var average = [];
 var detectorsALL = [];
@@ -61,9 +61,11 @@ var countDay = 0;
 
 var avgVht = [];
 
-var selectedDay = 0;
+var selectedDay = 4;
 
-var RefTable = [{'name':'aE:Ring-After Exit,  bI:Ring-Before Incoming,  RI:Ring,  EX:Exit,  N8:Incoming from N8,  E/P:Exit & Parallel,  In:Incoming,  TL:Tunnel'}];
+var RefTable = [{
+  'name': 'aE:Ring-After Exit,  bI:Ring-Before Incoming,  RI:Ring,  EX:Exit,  N8:Incoming from N8,  E/P:Exit & Parallel,  In:Incoming,  TL:Tunnel'
+}];
 
 // object obs contains every row of the data set
 var obs = function(row) {
@@ -73,8 +75,8 @@ var obs = function(row) {
   this.Vht = row.getNum("Vht");
   this.It = row.getNum("It");
   this.Bt = row.getNum("Bt");
-  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);  
-  this.X = map(this.lattitude, 4, 4.93, 0, heightMap); 
+  this.Y = map(this.longitude, 50.72, 51, widthMap, 0);
+  this.X = map(this.lattitude, 4, 4.93, 0, heightMap);
   this.Day = row.getNum("DAY");
   this.Month = row.getNum("MONTH");
   this.Time = row.getNum("TIME");
@@ -149,33 +151,27 @@ function setup() {
   image(detectorsImage, 220, margin);
   //console.log(detectors.length)
 
-  
+
   // Draw color reference bars
   drawColorBars();
 
   // Draw Table
   translate(widthCanvas - widthTable, margin);
   // filter data according to Day and month
- 
- // -------------- Table ---------------
-   
+
+  // -------------- Table ---------------
+
   drawTableText();
-  translate(-widthCanvas +widthTable, -margin);
+  translate(-widthCanvas + widthTable, -margin);
   TableRefs();
   translate(widthCanvas - widthTable, margin);
- 
+
   img = setTable(selectedDay);
- 
+
   image(img, 0, 0);
   c = 0;
   translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
   drawRing(c)
-
-
-
-
-
-
   noLoop();
 }
 
@@ -184,7 +180,8 @@ function draw() {
 
   image(detectorsImageALL, 220, margin);
   image(detectorsImage, 220, margin);
-  
+
+  /*
   // Create buttons for choice of day in the table
   buttonMon = createButton('Monday');
   buttonMon.position(widthCanvas * 0.4, 20);
@@ -209,15 +206,15 @@ function draw() {
   buttonFri = createButton('Friday');
   buttonFri.position(widthCanvas * 0.4, 100);
   buttonFri.size(100, 20);
-
+*/
   /*
     translate(widthCanvas - widthTable, margin);
     drawTableText();
     translate(widthTable-widthCanvas, -margin)
-  */  
-  
- //img = setTable(selectedDay);
-  
+  */
+
+  //img = setTable(selectedDay);
+
   // Interactivity Detectors
   if (trig === 1) {
     c = floor((mouseX - 0.55 * widthCanvas) / widthBar); // bar identifier c = 0, 1, ..., 27 for inner ring
@@ -238,7 +235,7 @@ function draw() {
     image(img, widthCanvas - widthTable, margin);
     translate(widthCanvas - widthTable, margin);
     drawTableText();
-    translate(-widthCanvas+widthTable, -margin)
+    translate(-widthCanvas + widthTable, -margin)
     TableRefs();
 
     translate(.55 * widthCanvas + c * widthBar, margin);
@@ -257,9 +254,9 @@ function draw() {
     noStroke();
     fill(255, 215, 0);
     ellipse(220 + detectors[3960 * c].X, margin + detectors[3960 * c].Y, 10, 10);
-    console.log(detectors[3961]);
+   // console.log(detectors[3961]);
     fill(0);
-    text(detectors[3960 * c].longitude + "   " + detectors[3960 * c].lattitude, widthCanvas*0.2, margin);
+    text(detectors[3960 * c].longitude + "   " + detectors[3960 * c].lattitude, widthCanvas * 0.2, margin);
     pop();
 
     // Draw ring
@@ -267,16 +264,16 @@ function draw() {
     translate(widthCanvas - widthTable, margin);
     translate(-widthTable * 0.76, heightMap * 1.95); // -widthMap + widthTable * 0.5, heightMap * 1.2
     drawRing(c);
- //       averPeak = computeAvgVhtPeak(c, 1, 1);
+    //       averPeak = computeAvgVhtPeak(c, 1, 1);
 
     pop();
-    
-  }  else if (trig === 2) {
-  
+
+  } else if (trig === 2) {
+
     c = 0;
-    
+
     console.log(selectedDay);
-    
+
     push();
     img = setTable(selectedDay);
     // translate(widthTable * 0.76, -heightMap * 1.95);
@@ -286,10 +283,10 @@ function draw() {
     image(img, widthCanvas - widthTable, margin);
     translate(widthCanvas - widthTable, margin);
     drawTableText();
-    translate(-widthCanvas+widthTable, -margin)
+    translate(-widthCanvas + widthTable, -margin)
     TableRefs();
     pop();
-    
+
     // Draw detectors
     push();
     colorMode(RGB, 255);
@@ -310,8 +307,8 @@ function draw() {
     pop();
 
     drawColorBars();
-    }
-    trig = 0;
+  }
+  trig = 0;
 }
 
 // sienna	#A0522D	(160,82,45,int)
@@ -367,34 +364,33 @@ function drawRing(det) {
         text("M", (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
       }
     }
-    if ((cc - 22) % 5 == 0 && cc >= 22) {
+    if ((cc - 22) % 5 == 2 && cc >= 22) {
       if (cc > 38) {
         text("M", (R2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
       } else {
         text("M", (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
       }
     }
-//    text(cc, (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
+    text("5 am",-10, -70)
+    text("7 pm", -10, -355)
+    //    text(cc, (R2 + i * 0.2 + 10 + 181 * timeRay) * sin(theta * (i + 1)), (R2 + i * 0.2 + 10 + 181 * timeRay) * (-cos(theta * (i + 1))));
     cc++;
   }
   /*
         overallAvg = computeAvgVht(i + 1, selectedDay);
         line((R3 * sin(theta * (i + 1)), (R3 * (-cos(theta * (i + 1))), (R3 * sin(theta * (i + 1)), (R3 * (-cos(theta * (i + 1))));
-    */    
+    */
 }
 
 
 function computeAvgVht(detOrder, dayOfWeek) {
   // select only Mondays for example
-  /*
-  var selDayOfWeek = detectors.filter(function(obj) {
-    return (obj.Day % 5 == 1);
-  });
-*/
-  var selDayDet = detectors.filter(function(obj) {
-    return (obj.Day % 5 == dayOfWeek && obj.Order == detOrder);
-  });
 
+  var selDayDet = detectors.filter(function(obj) {
+    return (obj.Month == 3 && obj.Day % 5 == dayOfWeek && obj.Order == detOrder);
+  });
+console.log(selDayDet.length)
+  
   // compute average Vht
   var sumVht = new Array(180);
   var avg = new Array(180);
@@ -452,7 +448,7 @@ function drawColorBars() {
     var colMapTable = map(i, 0, 200, 255, 50);
     noStroke();
     colorMode(RGB, 225, 255, 255, 255);
-    fill(102,0,0, colMapTable); // 46, 139, 87
+    fill(102, 0, 0, colMapTable); // 46, 139, 87
     rect(margin + 2 * widthBar, 160 + i * heightTable / 800, widthBar / 2, heightTable / 800);
   }
   noStroke()
@@ -538,19 +534,20 @@ function chooseFri() {
 
 
 function chooseDay(mX, mY) {
-    if (mX >= widthCanvas*0.4 && mX <= (widthCanvas*0.4 + 100) && mY >= 20 && mY <=120) {
-        if (mY >= 20 && mY < 40) {
-            selectedDay = 0; 
-        } else if (mY >= 40 && mY < 60) {
-            selectedDay = 1;
-        } else if (mY >= 60 && mY < 80) {
-            selectedDay = 2;   
-        } else if (mY >= 80 && mY <= 100) {
-            selectedDay = 3;  
-        } else {
-            selectedDay = 4;}
+  if (mX >= widthCanvas * 0.4 && mX <= (widthCanvas * 0.4 + 100) && mY >= 20 && mY <= 120) {
+    if (mY >= 20 && mY < 40) {
+      selectedDay = 0;
+    } else if (mY >= 40 && mY < 60) {
+      selectedDay = 1;
+    } else if (mY >= 60 && mY < 80) {
+      selectedDay = 2;
+    } else if (mY >= 80 && mY <= 100) {
+      selectedDay = 3;
+    } else {
+      selectedDay = 4;
     }
-    return selectedDay;
+  }
+  return selectedDay;
 }
 
 
@@ -621,34 +618,34 @@ function drawColorBars() {
 }
 
 function TableRefs() {
-    textSize(10);
-    fill(0);
-    noStroke();
-    text(RefTable[0].name, widthCanvas - widthTable, heightTable + 1.8*margin);
-    }
+  textSize(10);
+  fill(0);
+  noStroke();
+  text(RefTable[0].name, widthCanvas - widthTable, heightTable + 1.8 * margin);
+}
 
 function mouseClicked() {
   if (mouseX >= 0.55 * widthCanvas && mouseX <= 0.55 * widthCanvas + numDetIN * widthBar) {
     trig = 1;
 
 
-    
+
     colorMode(RGB, 255);
     stroke(255);
     fill(255);
     rect(0, 0, widthCanvas, heightCanvas);
-    
+
     redraw();
     drawColorBars();
-  } else if (mouseX >= widthCanvas*0.4 && mouseX <= (widthCanvas*0.4 + 100) && mouseY >= 20 && mouseY <= 120) {
+  } else if (mouseX >= widthCanvas * 0.4 && mouseX <= (widthCanvas * 0.4 + 100) && mouseY >= 20 && mouseY <= 120) {
     trig = 2;
     selectedDay = chooseDay(mouseX, mouseY);
-    
+
     colorMode(RGB, 255);
     stroke(255);
     fill(255);
     rect(0, 0, widthCanvas, heightCanvas);
-    
+
     redraw();
   } else {
     trig = 0;
@@ -667,7 +664,7 @@ function mousePressed() {
 
 
 
- // Draw the rectangles for each observation
+// Draw the rectangles for each observation
 function setTable(selectedDayofWeek) {
   for (var i = 0; i < 28; i++) {
     avgVht = computeAvgVht(i + 1, selectedDayofWeek);
@@ -681,9 +678,9 @@ function setTable(selectedDayofWeek) {
       tableImage.rect(widthBar * i, heightHour / 12 * k, widthBar, heightHour / 12)
     }
   }
-// for (var i = 0; i<28; i++) {
-//  average[i] = sumAvg[i]/28;
-// }
+  // for (var i = 0; i<28; i++) {
+  //  average[i] = sumAvg[i]/28;
+  // }
 
   /*
     // Draw the rectangles for each observation
@@ -701,8 +698,7 @@ function setTable(selectedDayofWeek) {
     tableImage.strokeWeight(4);
     tableImage.line(i * widthBar, 0, i * widthBar, heightTable);
   }
-  
-  return tableImage;
-  
-  };
 
+  return tableImage;
+
+};
